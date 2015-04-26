@@ -1,6 +1,7 @@
 #include <cmath>
 #include "imageCharacterization.h"
 #include "perimeterVSarea.h"
+#include "convexity.h"
 
 string infoFile(string filename) {
     int lastindex = filename.find_last_of(".");
@@ -30,6 +31,7 @@ void ImageCharacterization::computeSignatureVector(const Image &image, const Dig
     if(this->signatureVector.size() != 0)
         return ;
     this->signatureVector.push_back(perimeterVSarea(image.domain(), object)) ;
+    this->signatureVector.push_back(convexity(image.domain(), object)) ;
 }
 
 vector<double> ImageCharacterization::getSignatureVector(void) {
