@@ -24,16 +24,10 @@ int main(int argc, char *argv[])
     std::string filename = argv[1];
     //Image type (image of unsigned int)
 
-    //We read the PGM file
-    Image image = PGMReader<Image>::importPGM(filename);
-
-    ImageCharacterization img = ImageCharacterization(image) ;
+    ImageCharacterization img = ImageCharacterization(filename) ;
     img.computeSignatureVector() ;
     vector<double> signature = img.getSignatureVector() ;
     cout << signature[0] << endl ;
-
-
-    trace.info() << "Image read :"<< image <<std::endl;
-
+    img.dump() ;
     return 0;
 }
