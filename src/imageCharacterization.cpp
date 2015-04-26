@@ -6,5 +6,5 @@ ImageCharacterization::ImageCharacterization(Image image) : image(image), object
 }
 
 void ImageCharacterization::computeSignatureVector(void) {
-    this->signatureVector.push_back(perimeterVSarea(this->object)) ;
+    this->signatureVector.push_back(perimeterVSarea(this->image.domain(), this->object)) ;
 }
