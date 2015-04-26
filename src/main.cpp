@@ -1,10 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
+#include <string.h>
 #include <iostream>
 #include <vector>
 #include <cassert>
 #include <thread>
 #include <mutex>
-#include <boost/filesystem.hpp>
+#include <dirent.h>
 #include <DGtal/base/Common.h>
 #include <DGtal/io/boards/Board2D.h>
 #include <DGtal/helpers/StdDefs.h>
@@ -15,7 +16,6 @@
 #include "imageClass.h"
 ///////////////////////////////////////////////////////////////////////////////
 
-namespace fs = boost::filesystem;
 using namespace std;
 using namespace DGtal;
 using namespace DGtal::Z2i; //We'll only consider Z² digital space on
@@ -38,12 +38,15 @@ void computeClasses(int argc, char *argv[], int *index, mutex *index_mutex, vect
         if(!flag)
             break ;
         vector<string> filenames ;
-        fs::path dir(argv[my_index]) ;
-        fs::directory_iterator end ;
-        for(fs::directory_iterator iter(dir) ; iter != end ; ++iter) {
-            assert(fs::is_regular_file(iter->status())) ;
-            filenames.push_back(iter->path().string());
+        struct dirent *entry; // sorry for dirent, boost/filesystem was not available on servsls@ens-lyon.fr
+        DIR *dp;
+        dp = opendir(argv[my_index]);
+        while((entry = readdir(dp))) {
+            if(!((strcmp(".",entry->d_name)==0) || (strcmp("..",entry->d_name)==0))) {
+                filenames.push_back(((string)argv[my_index])+"/"+((string)entry->d_name));
+            }
         }
+        closedir(dp);
         ImageClass img(filenames) ;
         classes_mutex->lock() ;
         classes->push_back(img);
@@ -64,11 +67,14 @@ int main(int argc, char *argv[]) {
         return 1 ;
     }    // Check validity of directories
     for(int i = 3 ; i < argc ; i++) {
-        fs::path dir(argv[i]) ;
-        if(!fs::exists(dir) || !fs::is_directory(dir)) {
-            cerr << "Error: " << argv[i] << " is not a directory." << endl ;
-            return 1 ;
+        DIR *dp;
+        dp = opendir(argv[i]);
+        if (dp == NULL) {
+            cerr << "Error with " << argv[i] << endl ;
+            perror("opendir: Path does not exist or could not be read.");
+            return 1;
         }
+        closedir(dp);
     }
     int index = 3 ;
     mutex index_mutex ;
