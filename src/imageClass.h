@@ -9,7 +9,8 @@ class ImageClass {
     private:
         vector<ImageCharacterization> characterizations ;
     public:
-        ImageClass(vector<string> filenames) ;
+        ImageClass(const vector<string> &filenames) ;
+        void dump(void) ;
         double minDistance(const ImageCharacterization image) ;
         double maxDistance(const ImageCharacterization image) ;
         double meanDistance(const ImageCharacterization image) ;

@@ -8,6 +8,7 @@
 #include "DGtal/images/imagesSetsUtils/SetFromImage.h"
 #include "DGtal/images/ImageContainerBySTLVector.h"
 #include "imageCharacterization.h"
+#include "imageClass.h"
 ///////////////////////////////////////////////////////////////////////////////
 
 using namespace std;
@@ -17,17 +18,20 @@ using namespace DGtal::Z2i; //We'll only consider Z² digital space on
 
 int main(int argc, char *argv[])
 {
-    if(argc != 3) {
-        cerr << "Syntax:" << argv[0] << " <filename 1> <filename 2>" << endl ;
+    if(argc < 3) {
+        cerr << "Syntax:" << argv[0] << " <filename 1> <other filenames>" << endl ;
         return 1 ;
     }
-    string filename1 = argv[1];
-    string filename2 = argv[2];
-    //Image type (image of unsigned int)
-    ImageCharacterization img1 = ImageCharacterization(filename1) ;
-    ImageCharacterization img2 = ImageCharacterization(filename2) ;
-    cout << "distance = " << img1.distance(img2) << endl ;
+    string filename1 = argv[1] ;
+    vector<string> filenames ;
+    for(int i = 2 ; i < argc ; i++) {
+        filenames.push_back((string) argv[i]) ;
+    }
+    ImageCharacterization img1(filename1) ;
+    ImageClass images(filenames) ;
+    cout << "distance min = " << images.minDistance(img1) << endl ;
+    cout << "distance max = " << images.maxDistance(img1) << endl ;
     img1.dump() ;
-    img2.dump() ;
+    images.dump() ;
     return 0;
 }
