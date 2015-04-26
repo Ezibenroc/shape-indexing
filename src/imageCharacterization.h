@@ -29,6 +29,7 @@ class ImageCharacterization {
         void computeSignatureVector(void) ;
         vector<double> getSignatureVector(void) ;
         void dump(void) ;
+        double distance(const ImageCharacterization &other) ;
 };
 
 #endif

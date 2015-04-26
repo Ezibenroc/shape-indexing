@@ -1,3 +1,4 @@
+#include <cmath>
 #include "imageCharacterization.h"
 #include "perimeterVSarea.h"
 
@@ -39,4 +40,12 @@ void ImageCharacterization::dump(void) {
         outfile << this->signatureVector[i] << "\n" ;
     }
     outfile.close() ;
+}
+
+double ImageCharacterization::distance(const ImageCharacterization &other) {
+    double dist = 0;
+    for(unsigned i = 0 ; i < this->signatureVector.size() ; i++) {
+        dist += (this->signatureVector[i]-other.signatureVector[i])*(this->signatureVector[i]-other.signatureVector[i]) ;
+    }
+    return sqrt(dist) ;
 }
