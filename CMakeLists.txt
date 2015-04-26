@@ -13,6 +13,7 @@ if ( Boost_FOUND )
   message(STATUS "Boost and boost_program_options found.")
   include_directories( ${Boost_INCLUDE_DIRS} )
  endif( Boost_FOUND )
+ find_package(Threads)
 
 
 FIND_PACKAGE(DGtal REQUIRED)
@@ -43,6 +44,6 @@ add_library(ImageClass src/imageClass)
 target_link_libraries(ImageClass ImageCharacterization)
 
 add_executable(main src/main)
-target_link_libraries(main ImageClass ImageCharacterization ${DGTAL_LIBRARIES}  ${Boost_LIBRAIRIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY})
+target_link_libraries(main ImageClass ImageCharacterization ${DGTAL_LIBRARIES}  ${Boost_LIBRAIRIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -O3")
