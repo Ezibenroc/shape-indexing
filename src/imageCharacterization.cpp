@@ -7,11 +7,7 @@ string infoFile(string filename) {
     return filename.substr(0, lastindex) + ".info";
 }
 
-ImageCharacterization::ImageCharacterization(Image image) : filename(""), image(image), object(image.domain()), signatureVector() {
-    SetFromImage<DigitalSet>::append<Image>(this->object, image, 0, 255) ;
-}
-
-ImageCharacterization::ImageCharacterization(string filename) : ImageCharacterization(PGMReader<Image>::importPGM(filename)) {
+ImageCharacterization::ImageCharacterization(string filename) {
     this->filename = filename ;
     string infoFileName = infoFile(filename) ;
     std::ifstream infile(infoFileName);
@@ -20,14 +16,20 @@ ImageCharacterization::ImageCharacterization(string filename) : ImageCharacteriz
          while (infile >> value) {
              this->signatureVector.push_back(value) ;
          }
+         infile.close() ;
     }
-    infile.close() ;
+    else {
+        Image image(PGMReader<Image>::importPGM(filename)) ;
+        DigitalSet object(image.domain()) ;
+        SetFromImage<DigitalSet>::append<Image>(object, image, 0, 255) ;
+        this->computeSignatureVector(image, object) ;
+    }
 }
 
-void ImageCharacterization::computeSignatureVector(void) {
+void ImageCharacterization::computeSignatureVector(const Image &image, const DigitalSet object) {
     if(this->signatureVector.size() != 0)
         return ;
-    this->signatureVector.push_back(perimeterVSarea(this->image.domain(), this->object)) ;
+    this->signatureVector.push_back(perimeterVSarea(image.domain(), object)) ;
 }
 
 vector<double> ImageCharacterization::getSignatureVector(void) {

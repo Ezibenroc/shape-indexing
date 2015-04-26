@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
     //Image type (image of unsigned int)
 
     ImageCharacterization img = ImageCharacterization(filename) ;
-    img.computeSignatureVector() ;
     vector<double> signature = img.getSignatureVector() ;
     cout << signature[0] << endl ;
     img.dump() ;

@@ -7,7 +7,7 @@ double dist(Point p1, Point p2) {
 
 vector<Point> pos = {Point(-1, -1), Point(-1, 0), Point(-1, 1), Point(0, 1), Point(1, 1), Point(1, 0), Point(1, -1), Point(0, -1)};
 
-vector<Point> getNeighbours(Domain d, Point p) {
+vector<Point> getNeighbours(const Domain d, Point p) {
     vector<Point> neigh ;
     for(unsigned i = 0 ; i < pos.size()  ; i++) {
         Point other = pos[i] + p ;
@@ -26,7 +26,7 @@ unsigned mod(int p, int n) {
     return p ;
 }
 
-Point nextPoint(DigitalSet object, Point before, Point now) {
+Point nextPoint(const DigitalSet object, Point before, Point now) {
     Point diff = now-before ;
     unsigned i = 0 ;
     for(i = 0 ; i < pos.size() && pos[i] != diff ; i++)
@@ -38,7 +38,7 @@ Point nextPoint(DigitalSet object, Point before, Point now) {
     return now + pos[mod(i, pos.size())] ;
 }
 
-vector<Point> extractBorder(Domain domain, DigitalSet object) {
+vector<Point> extractBorder(const Domain domain, const DigitalSet object) {
     vector<Point> border;
     Point start ;
     //Search a point which is in the domain
@@ -63,7 +63,7 @@ vector<Point> extractBorder(Domain domain, DigitalSet object) {
       return border ;
 }
 
-double getPerimeter(Domain domain, DigitalSet object) {
+double getPerimeter(const Domain domain, const DigitalSet object) {
     vector<Point> border = extractBorder(domain, object) ;
     double perimeter = dist(border[0], border[border.size()-1]);
     for(unsigned i = 0 ; i < border.size()-1 ; i++) {
@@ -72,11 +72,11 @@ double getPerimeter(Domain domain, DigitalSet object) {
     return perimeter ;
 }
 
-double getArea(DigitalSet object) {
+double getArea(const DigitalSet object) {
     return (double)object.size() ;
 }
 
-double perimeterVSarea(Domain domain, DigitalSet object) {
+double perimeterVSarea(const Domain domain, const DigitalSet object) {
     double perimeter = getPerimeter(domain, object) ;
     double area = getArea(object) ;
     return area*4*M_PI/(perimeter*perimeter) ;

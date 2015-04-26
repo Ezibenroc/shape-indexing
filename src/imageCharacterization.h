@@ -20,13 +20,10 @@ typedef ImageContainerBySTLVector< Domain, unsigned int > Image;
 class ImageCharacterization {
     private:
         string filename ;
-        Image image ;
-        DigitalSet object ;
         vector<double> signatureVector ;
     public:
         ImageCharacterization(string filename) ;
-        ImageCharacterization(Image image) ;
-        void computeSignatureVector(void) ;
+        void computeSignatureVector(const Image &image, const DigitalSet object) ;
         vector<double> getSignatureVector(void) ;
         void dump(void) ;
         double distance(const ImageCharacterization &other) ;
