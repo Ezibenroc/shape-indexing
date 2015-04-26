@@ -31,8 +31,11 @@ double ImageClass::maxDistance(const ImageCharacterization image) {
 }
 
 double ImageClass::meanDistance(const ImageCharacterization image) {
-    assert(false) ;
-    return 0 ;
+    double d = this->characterizations[0].distance(image) ;
+    for(unsigned i = 1 ; i < this->characterizations.size() ; i++) {
+        d += this->characterizations[i].distance(image) ;
+    }
+    return d/((double)this->characterizations.size()) ;
 }
 
 double ImageClass::medianDistance(const ImageCharacterization image) {

@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
     ImageClass images(filenames) ;
     cout << "distance min = " << images.minDistance(img1) << endl ;
     cout << "distance max = " << images.maxDistance(img1) << endl ;
+    cout << "mean distance = " << images.meanDistance(img1) << endl ;
     img1.dump() ;
     images.dump() ;
     return 0;
