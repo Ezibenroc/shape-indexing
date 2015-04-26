@@ -17,15 +17,17 @@ using namespace DGtal::Z2i; //We'll only consider Z² digital space on
 
 int main()
 {
-  std::string filename = "hop.pgm";
-  //Image type (image of unsigned int)
+    std::string filename = "hop.pgm";
+    //Image type (image of unsigned int)
 
-  //We read the PGM file
-  Image image = PGMReader<Image>::importPGM(filename);
+    //We read the PGM file
+    Image image = PGMReader<Image>::importPGM(filename);
 
-  ImageCharacterization img = ImageCharacterization(image) ;
+    ImageCharacterization img = ImageCharacterization(image) ;
+    img.computeSignatureVector() ;
 
-  trace.info() << "Image read :"<< image <<std::endl;
 
-  return 0;
+    trace.info() << "Image read :"<< image <<std::endl;
+
+    return 0;
 }
