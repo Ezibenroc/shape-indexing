@@ -24,7 +24,8 @@ ImageCharacterization::ImageCharacterization(string filename) : ImageCharacteriz
 }
 
 void ImageCharacterization::computeSignatureVector(void) {
-    this->signatureVector.clear() ;
+    if(this->signatureVector.size() != 0)
+        return ;
     this->signatureVector.push_back(perimeterVSarea(this->image.domain(), this->object)) ;
 }
 

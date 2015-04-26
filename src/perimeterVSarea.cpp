@@ -18,7 +18,7 @@ vector<Point> getNeighbours(Domain d, Point p) {
 }
 
 
-int mod(int p, int n) {
+unsigned mod(int p, int n) {
     if(p>=n)
         return p-n ;
     if(p<0)
@@ -28,7 +28,7 @@ int mod(int p, int n) {
 
 Point nextPoint(DigitalSet object, Point before, Point now) {
     Point diff = now-before ;
-    int i = 0 ;
+    unsigned i = 0 ;
     for(i = 0 ; i < pos.size() && pos[i] != diff ; i++)
         continue ;
     assert(i < pos.size()) ;
