@@ -79,5 +79,5 @@ double getArea(DigitalSet object) {
 double perimeterVSarea(Domain domain, DigitalSet object) {
     double perimeter = getPerimeter(domain, object) ;
     double area = getArea(object) ;
-    return area/(M_PI*perimeter*perimeter) ;
+    return area*4*M_PI/(perimeter*perimeter) ;
 }
