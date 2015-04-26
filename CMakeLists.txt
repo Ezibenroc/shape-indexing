@@ -33,7 +33,10 @@ target_link_libraries(PerimeterVSArea ${DGTAL_LIBRARIES})
 add_library(ImageCharacterization src/imageCharacterization)
 target_link_libraries(ImageCharacterization PerimeterVSArea ${DGTAL_LIBRARIES})
 
+add_library(ImageClass src/imageClass)
+target_link_libraries(ImageClass ImageCharacterization)
+
 add_executable(main src/main)
-target_link_libraries(main ImageCharacterization ${DGTAL_LIBRARIES}  ${Boost_LIBRAIRIES}  ${Boost_PROGRAM_OPTIONS_LIBRARY})
+target_link_libraries(main ImageClass ImageCharacterization ${DGTAL_LIBRARIES}  ${Boost_LIBRAIRIES}  ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -O3")
