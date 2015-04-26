@@ -25,6 +25,7 @@ class ImageCharacterization {
     public:
         ImageCharacterization(Image image) ;
         void computeSignatureVector(void) ;
+        vector<double> getSignatureVector(void) ;
 };
 
 #endif

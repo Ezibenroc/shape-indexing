@@ -15,9 +15,13 @@ using namespace DGtal;
 using namespace DGtal::Z2i; //We'll only consider Z² digital space on
                 //32bit integers
 
-int main()
+int main(int argc, char *argv[])
 {
-    std::string filename = "hop.pgm";
+    if(argc != 2) {
+        cerr << "Syntax:" << argv[0] << " <filename>" << endl ;
+        return 1 ;
+    }
+    std::string filename = argv[1];
     //Image type (image of unsigned int)
 
     //We read the PGM file
@@ -25,6 +29,8 @@ int main()
 
     ImageCharacterization img = ImageCharacterization(image) ;
     img.computeSignatureVector() ;
+    vector<double> signature = img.getSignatureVector() ;
+    cout << signature[0] << endl ;
 
 
     trace.info() << "Image read :"<< image <<std::endl;
