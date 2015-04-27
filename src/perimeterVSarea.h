@@ -19,6 +19,6 @@ typedef ImageContainerBySTLVector< Domain, unsigned int > Image;
 /*
     Return area(object)/area(circle(perimeter((object))))
 */
-double perimeterVSarea(const Domain domain, const DigitalSet object ) ;
+double perimeterVSarea(const Domain domain, const DigitalSet object, vector<Point> &border) ;
 
 #endif

@@ -32,13 +32,13 @@ add_library(Border src/border)
 target_link_libraries(Border ${DGTAL_LIBRARIES})
 
 add_library(PerimeterVSArea src/perimeterVSarea)
-target_link_libraries(PerimeterVSArea Border ${DGTAL_LIBRARIES})
+target_link_libraries(PerimeterVSArea ${DGTAL_LIBRARIES})
 
 add_library(Convexity src/convexity)
-target_link_libraries(Convexity Border ${DGTAL_LIBRARIES})
+target_link_libraries(Convexity ${DGTAL_LIBRARIES})
 
 add_library(ImageCharacterization src/imageCharacterization)
-target_link_libraries(ImageCharacterization Convexity PerimeterVSArea ${DGTAL_LIBRARIES})
+target_link_libraries(ImageCharacterization Border Convexity PerimeterVSArea ${DGTAL_LIBRARIES})
 
 add_library(ImageClass src/imageClass)
 target_link_libraries(ImageClass ImageCharacterization)

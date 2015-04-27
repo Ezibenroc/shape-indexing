@@ -1,5 +1,6 @@
 #include <cmath>
 #include "imageCharacterization.h"
+#include "border.h"
 #include "perimeterVSarea.h"
 #include "convexity.h"
 
@@ -56,8 +57,9 @@ ImageCharacterization::ImageCharacterization(string filename) {
 void ImageCharacterization::computeSignatureVector(const Image &image, const DigitalSet object) {
     if(this->signatureVector.size() != 0)
         return ;
-    this->signatureVector.push_back(perimeterVSarea(image.domain(), object)) ;
-    this->signatureVector.push_back(convexity(image.domain(), object)) ;
+    vector<Point> border = extractBorder(image.domain(), object) ;
+    this->signatureVector.push_back(perimeterVSarea(image.domain(), object, border)) ;
+    this->signatureVector.push_back(convexity(image.domain(), object, border)) ;
 }
 
 vector<double> ImageCharacterization::getSignatureVector(void) {

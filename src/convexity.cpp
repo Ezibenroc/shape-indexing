@@ -1,6 +1,5 @@
 #include <cmath>
 #include <algorithm>
-#include "border.h"
 #include "convexity.h"
 
 int orientation(Point p, Point q, Point r) {
@@ -27,9 +26,7 @@ public:
 
 
 // Graham Scan
-vector<Point> getConvexHull(Domain domain, DigitalSet object) {
-    vector<Point> border = extractBorder(domain, object) ;
-
+vector<Point> getConvexHull(Domain domain, DigitalSet object, vector<Point> &border) {
     if(border.size() <= 2)
         return border ;
 
@@ -62,8 +59,8 @@ vector<Point> getConvexHull(Domain domain, DigitalSet object) {
     return convexHull;
 }
 
-double getConvexHullArea(Domain domain, DigitalSet object) {
-    vector<Point> convexHull = getConvexHull(domain, object) ;
+double getConvexHullArea(Domain domain, DigitalSet object, vector<Point> &border) {
+    vector<Point> convexHull = getConvexHull(domain, object, border) ;
     double area = 0.0;
     for(unsigned i = 0 ; i < convexHull.size() ; i++) {
         Point p = convexHull[i];
@@ -73,8 +70,8 @@ double getConvexHullArea(Domain domain, DigitalSet object) {
     return abs(area) ;
 }
 
-double convexity(Domain domain, DigitalSet object) {
-    double convexArea = getConvexHullArea(domain, object) ;
+double convexity(Domain domain, DigitalSet object, vector<Point> &border) {
+    double convexArea = getConvexHullArea(domain, object, border) ;
     double area = (double)object.size() ;
     return area/convexArea ;
 }
