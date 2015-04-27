@@ -48,8 +48,10 @@ vector<Point> extractBorder(const Domain domain, const DigitalSet object) {
       border.push_back(start) ;
       vector<Point> neigh = getNeighbours(domain, start) ;
       for(unsigned i = 0 ; i <= neigh.size() ; i++) {
-          if(!object(neigh[mod(i-1, neigh.size())]) && object(neigh[mod(i, neigh.size())]))
+          if(!object(neigh[mod(i-1, neigh.size())]) && object(neigh[mod(i, neigh.size())])) {
             border.push_back(neigh[mod(i, neigh.size())]) ;
+            break ;
+        }
       }
       assert(border.size() == 2) ;
       while(border.back() != start) {
