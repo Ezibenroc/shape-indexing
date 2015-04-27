@@ -1,5 +1,6 @@
 #include <cmath>
 #include "imageCharacterization.h"
+#include "moment.h"
 #include "border.h"
 #include "perimeterVSarea.h"
 #include "convexity.h"
@@ -60,6 +61,10 @@ void ImageCharacterization::computeSignatureVector(const Image &image, const Dig
     vector<Point> border = extractBorder(image.domain(), object) ;
     this->signatureVector.push_back(perimeterVSarea(image.domain(), object, border)) ;
     this->signatureVector.push_back(convexity(image.domain(), object, border)) ;
+    vector<double> imageMoments = moment(image) ;
+    for(unsigned i = 0 ; i < imageMoments.size() ; i++) {
+        this->signatureVector.push_back(imageMoments[i]) ;
+    }
 }
 
 vector<double> ImageCharacterization::getSignatureVector(void) {
