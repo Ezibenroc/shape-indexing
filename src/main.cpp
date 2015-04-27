@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
         threads[i].join() ;
     }
 
-    string filename1 = argv[1] ;
+    string filename1 = argv[2] ;
     ImageCharacterization img1(filename1) ;
     for(unsigned i = 0 ; i < classes.size() ; i++) {
         cout << "# " << argv[i+2] << endl ;
