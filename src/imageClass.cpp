@@ -39,6 +39,11 @@ double ImageClass::meanDistance(const ImageCharacterization image) {
 }
 
 double ImageClass::medianDistance(const ImageCharacterization image) {
-    assert(false) ;
-    return 0 ;
+    vector<double> distances ;
+    for(unsigned i = 0 ; i < this->characterizations.size() ; i++) {
+        distances.push_back(this->characterizations[i].distance(image)) ;
+    }
+    size_t n = distances.size() / 2;
+    nth_element(distances.begin(), distances.begin()+n, distances.end());
+    return distances[n];
 }

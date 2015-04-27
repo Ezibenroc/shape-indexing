@@ -95,7 +95,8 @@ int main(int argc, char *argv[]) {
         cout << "# " << argv[i+2] << endl ;
         cout << "distance min = " << classes[i].minDistance(img1) << endl ;
         cout << "distance max = " << classes[i].maxDistance(img1) << endl ;
-        cout << "mean distance = " << classes[i].meanDistance(img1) << endl << endl ;
+        cout << "mean distance = " << classes[i].meanDistance(img1) << endl ;
+        cout << "median distance = " << classes[i].medianDistance(img1) << endl << endl ;
     }
     img1.dump() ;
     return 0;
