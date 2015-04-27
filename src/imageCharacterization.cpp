@@ -8,6 +8,30 @@ string infoFile(string filename) {
     return filename.substr(0, lastindex) + ".info";
 }
 
+bool isOK(Image &image) {
+    int nbBlackSidePixels = 0 ;
+    Point lowerBound = image.domain().lowerBound(), upperBound = image.domain().upperBound() ;
+    for(int i = lowerBound[0] ; i < upperBound[0] ; i++) {
+        if(image(Point(i, lowerBound[1])))
+            nbBlackSidePixels ++ ;
+        if(image(Point(i, upperBound[1]-1)))
+            nbBlackSidePixels ++ ;
+    }
+    for(int i = lowerBound[1] ; i < upperBound[1] ; i++) {
+        if(image(Point(lowerBound[0], i)))
+            nbBlackSidePixels ++ ;
+        if(image(Point(upperBound[0]-1, i)))
+            nbBlackSidePixels ++ ;
+    }
+    return (nbBlackSidePixels <= upperBound[0]-lowerBound[0] + upperBound[1]-lowerBound[1]) ;
+}
+
+void swap(Image &image) {
+    for(Domain::ConstIterator it = image.domain().begin(); it != image.domain().end(); ++it) {
+        image.setValue(*it, !image(*it)) ;
+    }
+}
+
 ImageCharacterization::ImageCharacterization(string filename) {
     this->filename = filename ;
     string infoFileName = infoFile(filename) ;
@@ -21,6 +45,8 @@ ImageCharacterization::ImageCharacterization(string filename) {
     }
     else {
         Image image(PGMReader<Image>::importPGM(filename)) ;
+        if(!isOK(image))
+            swap(image) ;
         DigitalSet object(image.domain()) ;
         SetFromImage<DigitalSet>::append<Image>(object, image, 0, 255) ;
         this->computeSignatureVector(image, object) ;
