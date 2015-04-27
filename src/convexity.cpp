@@ -26,7 +26,8 @@ public:
 
 
 // Graham Scan
-vector<Point> getConvexHull(Domain domain, DigitalSet object, vector<Point> &border) {
+vector<Point> getConvexHull(const Domain &domain, const DigitalSet &object, const vector<Point> &brdr) {
+    vector<Point> border(brdr) ;
     if(border.size() <= 2)
         return border ;
 
@@ -59,7 +60,7 @@ vector<Point> getConvexHull(Domain domain, DigitalSet object, vector<Point> &bor
     return convexHull;
 }
 
-double getConvexHullArea(Domain domain, DigitalSet object, vector<Point> &border) {
+double getConvexHullArea(const Domain &domain, const DigitalSet &object, const vector<Point> &border) {
     vector<Point> convexHull = getConvexHull(domain, object, border) ;
     double area = 0.0;
     for(unsigned i = 0 ; i < convexHull.size() ; i++) {
@@ -70,7 +71,7 @@ double getConvexHullArea(Domain domain, DigitalSet object, vector<Point> &border
     return abs(area) ;
 }
 
-double convexity(Domain domain, DigitalSet object, vector<Point> &border) {
+double convexity(const Domain &domain, const DigitalSet &object, const vector<Point> &border) {
     double convexArea = getConvexHullArea(domain, object, border) ;
     double area = (double)object.size() ;
     return area/convexArea ;

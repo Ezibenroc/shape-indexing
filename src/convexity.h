@@ -19,6 +19,6 @@ typedef ImageContainerBySTLVector< Domain, unsigned int > Image;
 /*
     Return area(object)/area(circle(perimeter((object))))
 */
-double convexity(Domain domain, DigitalSet object, vector<Point> &border) ;
+double convexity(const Domain &domain, const DigitalSet &object, const vector<Point> &border) ;
 
 #endif
