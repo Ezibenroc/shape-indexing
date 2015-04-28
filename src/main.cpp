@@ -143,7 +143,8 @@ int main(int argc, char *argv[]) {
                 minIndex = i ;
             }
         }
-        cout << argv[index] << " is likely to belong to " << argv[index+minIndex] << endl ;
+        assert(minIndex != -1) ;
+        cout << argv[indexFiles] << " is likely to belong to " << argv[indexFiles+minIndex] << endl ;
     }
     return 0;
 }
