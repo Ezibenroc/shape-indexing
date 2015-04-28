@@ -53,6 +53,7 @@ ImageCharacterization::ImageCharacterization(string filename) {
         DigitalSet object(image.domain()) ;
         SetFromImage<DigitalSet>::append<Image>(object, image, 0, 255) ;
         this->computeSignatureVector(image, object) ;
+        this->dump() ;
     }
 }
 

@@ -3,6 +3,7 @@
 #include <string>
 #include <sys/stat.h>
 #include <iostream>
+#include <algorithm>
 #include "imageClass.h"
 
 ImageClass::ImageClass(string dirname) {
@@ -42,36 +43,58 @@ void ImageClass::dump(void) {
     }
 }
 
-double ImageClass::minDistance(const ImageCharacterization image) {
-    double d = this->characterizations[0].distance(image) ;
-    for(unsigned i = 1 ; i < this->characterizations.size() ; i++) {
-        d = min(d, this->characterizations[i].distance(image)) ;
-    }
-    return d ;
+
+// Pre-condition: v is sorted in increasing order.
+double minElt(const vector<double> v) {
+    return v[0] ;
 }
 
-double ImageClass::maxDistance(const ImageCharacterization image) {
-    double d = this->characterizations[0].distance(image) ;
-    for(unsigned i = 1 ; i < this->characterizations.size() ; i++) {
-        d = max(d, this->characterizations[i].distance(image)) ;
-    }
-    return d ;
+// Pre-condition: v is sorted in increasing order.
+double maxElt(const vector<double> v) {
+    return v[v.size()-1] ;
 }
 
-double ImageClass::meanDistance(const ImageCharacterization image) {
-    double d = this->characterizations[0].distance(image) ;
-    for(unsigned i = 1 ; i < this->characterizations.size() ; i++) {
-        d += this->characterizations[i].distance(image) ;
+double meanElt(const vector<double> v) {
+    double d = 0 ;
+    for(unsigned i = 0 ; i < v.size() ; i++) {
+        d += v[i] ;
     }
-    return d/((double)this->characterizations.size()) ;
+    return d/((double)v.size()) ;
 }
 
-double ImageClass::medianDistance(const ImageCharacterization image) {
-    vector<double> distances ;
+// Pre-condition: v is sorted in increasing order.
+double medianElt(const vector<double> v) {
+    if(v.size()%2 == 1) {
+        return v[v.size()/2] ;
+    }
+    else {
+        return (v[v.size()/2-1] + v[v.size()/2])/2 ;
+    }
+}
+
+// Return [min, max, mean, median]
+vector<double> measures(vector<double> &sample) {
+    sort(begin(sample), end(sample)) ;
+    return {minElt(sample), maxElt(sample), meanElt(sample), medianElt(sample)} ;
+}
+
+vector<double> ImageClass::distances(void) {
+    vector<double> d ;
     for(unsigned i = 0 ; i < this->characterizations.size() ; i++) {
-        distances.push_back(this->characterizations[i].distance(image)) ;
+        for(unsigned j = 0 ; j < this->characterizations.size() ; j++) {
+            if(i != j)
+                d.push_back(this->characterizations[i].distance(this->characterizations[j])) ;
+        }
     }
-    size_t n = distances.size() / 2;
-    nth_element(distances.begin(), distances.begin()+n, distances.end());
-    return distances[n];
+    return measures(d) ;
+}
+
+vector<double> ImageClass::distances(const ImageClass &other) {
+    vector<double> d ;
+    for(unsigned i = 0 ; i < this->characterizations.size() ; i++) {
+        for(unsigned j = 0 ; j < other.characterizations.size() ; j++) {
+            d.push_back(this->characterizations[i].distance(other.characterizations[j])) ;
+        }
+    }
+    return measures(d) ;
 }

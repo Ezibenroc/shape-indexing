@@ -68,7 +68,6 @@ void computeClasses(int argc, char *argv[], int *index, mutex *index_mutex, vect
         cout << "size=" << img.size() << endl << endl ;
         classes_mutex->lock() ;
         classes->push_back(img);
-        img.dump() ;
         classes_mutex->unlock() ;
     }
 }
@@ -103,14 +102,14 @@ int main(int argc, char *argv[]) {
     }
 
     string filename1 = argv[2] ;
-    ImageCharacterization img1(filename1) ;
+    ImageClass img1(filename1) ;
     for(unsigned i = 0 ; i < classes.size() ; i++) {
         cout << "# " << argv[i+3] << endl ;
-        cout << "distance min = " << classes[i].minDistance(img1) << endl ;
-        cout << "distance max = " << classes[i].maxDistance(img1) << endl ;
-        cout << "mean distance = " << classes[i].meanDistance(img1) << endl ;
-        cout << "median distance = " << classes[i].medianDistance(img1) << endl << endl ;
+        vector<double> measures = img1.distances(classes[i]) ;
+        cout << "min distance    = " << measures[0] << endl ;
+        cout << "max distance    = " << measures[1] << endl ;
+        cout << "mean distance   = " << measures[2]<< endl ;
+        cout << "median distance = " << measures[3] << endl << endl ;
     }
-    img1.dump() ;
     return 0;
 }

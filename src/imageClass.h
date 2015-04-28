@@ -13,10 +13,10 @@ class ImageClass {
         ImageClass(string dirname) ;
         size_t size(void) ;
         void dump(void) ;
-        double minDistance(const ImageCharacterization image) ;
-        double maxDistance(const ImageCharacterization image) ;
-        double meanDistance(const ImageCharacterization image) ;
-        double medianDistance(const ImageCharacterization image) ;
+        // Return [min, max, mean, median]
+        vector<double> distances(void) ;
+        // Return [min, max, mean, median]
+        vector<double> distances(const ImageClass &other) ;
 };
 
 #endif
