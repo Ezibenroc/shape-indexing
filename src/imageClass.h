@@ -8,8 +8,10 @@ using namespace std;
 class ImageClass {
     private:
         vector<ImageCharacterization> characterizations ;
+        void addImages(string dirname) ;
     public:
-        ImageClass(const vector<string> &filenames) ;
+        ImageClass(string dirname) ;
+        size_t size(void) ;
         void dump(void) ;
         double minDistance(const ImageCharacterization image) ;
         double maxDistance(const ImageCharacterization image) ;

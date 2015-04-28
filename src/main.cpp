@@ -5,7 +5,6 @@
 #include <cassert>
 #include <thread>
 #include <mutex>
-#include <dirent.h>
 #include <DGtal/base/Common.h>
 #include <DGtal/io/boards/Board2D.h>
 #include <DGtal/helpers/StdDefs.h>
@@ -37,22 +36,12 @@ void computeClasses(int argc, char *argv[], int *index, mutex *index_mutex, vect
         index_mutex->unlock() ;
         if(!flag)
             break ;
-        vector<string> filenames ;
-        struct dirent *entry; // sorry for dirent, boost/filesystem was not available on servsls@ens-lyon.fr
-        DIR *dp;
-        dp = opendir(argv[my_index]);
-        while((entry = readdir(dp))) {
-            if(!((strcmp(".",entry->d_name)==0) || (strcmp("..",entry->d_name)==0))) {
-                filenames.push_back(((string)argv[my_index])+"/"+((string)entry->d_name));
-            }
-        }
-        closedir(dp);
-        ImageClass img(filenames) ;
+        ImageClass img(argv[my_index]) ;
+        cout << "size=" << img.size() << endl << endl ;
         classes_mutex->lock() ;
         classes->push_back(img);
         img.dump() ;
         classes_mutex->unlock() ;
-        filenames.clear() ;
     }
 }
 
@@ -66,16 +55,16 @@ int main(int argc, char *argv[]) {
         cerr << "Syntax:" << argv[0] << " <number of threads> <image filename> <classes repositories>" << endl ;
         return 1 ;
     }    // Check validity of directories
-    for(int i = 3 ; i < argc ; i++) {
-        DIR *dp;
-        dp = opendir(argv[i]);
-        if (dp == NULL) {
-            cerr << "Error with " << argv[i] << endl ;
-            perror("opendir: Path does not exist or could not be read.");
-            return 1;
-        }
-        closedir(dp);
-    }
+    // for(int i = 3 ; i < argc ; i++) {
+    //     DIR *dp;
+    //     dp = opendir(argv[i]);
+    //     if (dp == NULL) {
+    //         cerr << "Error with " << argv[i] << endl ;
+    //         perror("opendir: Path does not exist or could not be read.");
+    //         return 1;
+    //     }
+    //     closedir(dp);
+    // }
     int index = 3 ;
     mutex index_mutex ;
     vector<ImageClass> classes ;

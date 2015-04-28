@@ -1,4 +1,5 @@
 #include <cmath>
+#include <cassert>
 #include "imageCharacterization.h"
 #include "moment.h"
 #include "border.h"
@@ -81,6 +82,7 @@ void ImageCharacterization::dump(void) {
 
 double ImageCharacterization::distance(const ImageCharacterization &other) {
     double dist = 0;
+    assert(this->signatureVector.size() == other.signatureVector.size()) ;
     for(unsigned i = 0 ; i < this->signatureVector.size() ; i++) {
         dist += (this->signatureVector[i]-other.signatureVector[i])*(this->signatureVector[i]-other.signatureVector[i]) ;
     }
