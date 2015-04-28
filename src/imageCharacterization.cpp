@@ -80,7 +80,10 @@ vector<double> ImageCharacterization::getSignatureVector(void) {
 void ImageCharacterization::dump(void) {
     std::ofstream outfile(infoFile(this->filename));
     for(unsigned i = 0 ; i < this->signatureVector.size() ; i++) {
-        outfile << this->signatureVector[i] << "\n" ;
+        if(isfinite(this->signatureVector[i]))
+            outfile << this->signatureVector[i] << "\n" ;
+        else
+            outfile << "1e30" << "\n" ;
     }
     outfile.close() ;
 }
