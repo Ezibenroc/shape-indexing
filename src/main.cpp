@@ -65,30 +65,44 @@ void computeClasses(int argc, char *argv[], int *index, mutex *index_mutex, vect
         if(!flag)
             break ;
         ImageClass img(argv[my_index]) ;
-        cout << "size=" << img.size() << endl << endl ;
         classes_mutex->lock() ;
         classes->push_back(img);
         classes_mutex->unlock() ;
     }
 }
 
+void syntaxError(char *argv[]) {
+    cerr << "Syntax:" << argv[0] << " [-j <number of threads>] <directories>" << endl ;
+    exit(EXIT_FAILURE) ;
+}
+
+void printTitle(string str) {
+    cout << "\033[1;32m" << str << "\033[0m\n";
+}
+
 int main(int argc, char *argv[]) {
-    if(argc < 4) {
-        cerr << "Syntax:" << argv[0] << " <number of threads> <image filename> <classes repositories>" << endl ;
-        return 1 ;
+    if(argc < 2) {
+        syntaxError(argv) ;
     }
-    int nbThreads = min(atoi(argv[1]), argc-2) ;
-    if(nbThreads <= 0) {
-        cerr << "Syntax:" << argv[0] << " <number of threads> <image filename> <classes repositories>" << endl ;
-        return 1 ;
-    }    // Check validity of directories
-    for(int i = 3 ; i < argc ; i++) {
+    int indexFiles = 1, nbThreads = 1 ;
+    if((string)argv[1] == "-j") {
+        if(argc < 4) {
+            syntaxError(argv) ;
+        }
+        nbThreads = atoi(argv[2]) ;
+        if(nbThreads <= 0) {
+            syntaxError(argv) ;
+        }
+        indexFiles = 3 ;
+    }
+    for(int i = indexFiles ; i < argc ; i++) {
         if(!checkDir(argv[i])) {
             std::cerr << "Error: no pgm image in directory " << argv[i] << std::endl ;
             exit(EXIT_FAILURE) ;
         }
     }
-    int index = 3 ;
+    int index = indexFiles ;
+    int nbFiles = argc-indexFiles ;
     mutex index_mutex ;
     vector<ImageClass> classes ;
     mutex classes_mutex ;
@@ -101,15 +115,35 @@ int main(int argc, char *argv[]) {
         threads[i].join() ;
     }
 
-    string filename1 = argv[2] ;
-    ImageClass img1(filename1) ;
-    for(unsigned i = 0 ; i < classes.size() ; i++) {
-        cout << "# " << argv[i+3] << endl ;
-        vector<double> measures = img1.distances(classes[i]) ;
+    if(nbFiles == 1) { // Info about some class
+        printTitle("\n\nInformation about some class.");
+        vector<double> measures = classes[0].distances() ;
+        cout << "min distance    = " << measures[0] << endl ;
+        cout << "max distance    = " << measures[1] << endl ;
+        cout << "mean distance   = " << measures[2] << endl ;
+        cout << "median distance = " << measures[3] << endl << endl ;
+    }
+    else if(nbFiles ==2){ // Distance between two classes
+        printTitle("\n\nDistance between two classes.");
+        vector<double> measures = classes[0].distances(classes[1]) ;
         cout << "min distance    = " << measures[0] << endl ;
         cout << "max distance    = " << measures[1] << endl ;
         cout << "mean distance   = " << measures[2]<< endl ;
         cout << "median distance = " << measures[3] << endl << endl ;
+    }
+    else { // Retrieval of the class to which belong classes[0]
+        printTitle("\n\nRetrieval of a class.");
+        double median ;
+        double minMedian = 1e20;
+        int minIndex = -1 ;
+        for(int unsigned i = 1 ; i < classes.size() ; i++) {
+            median = classes[0].distances(classes[i])[3] ;
+            if(median < minMedian) {
+                minMedian = median ;
+                minIndex = i ;
+            }
+        }
+        cout << argv[index] << " is likely to belong to " << argv[index+minIndex] << endl ;
     }
     return 0;
 }
