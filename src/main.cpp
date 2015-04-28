@@ -5,6 +5,10 @@
 #include <cassert>
 #include <thread>
 #include <mutex>
+#include <dirent.h>
+#include <string>
+#include <stdlib.h>
+#include <sys/stat.h>
 #include <DGtal/base/Common.h>
 #include <DGtal/io/boards/Board2D.h>
 #include <DGtal/helpers/StdDefs.h>
@@ -19,6 +23,30 @@ using namespace std;
 using namespace DGtal;
 using namespace DGtal::Z2i; //We'll only consider Z² digital space on
                 //32bit integers
+
+// Verify that the given directory contains at least one pgm file.
+bool checkDir(string dirname) {
+    bool flag = false ;
+    struct stat st;
+    lstat((char*)dirname.c_str(), &st);
+    if(S_ISDIR(st.st_mode)) {
+        struct dirent *entry; // sorry for dirent, boost/filesystem was not available on servsls@ens-lyon.fr
+        DIR *dp;
+        dp = opendir((char*)dirname.c_str());
+        while((entry = readdir(dp)) && !flag) {
+            if(!((strcmp(".",entry->d_name)==0) || (strcmp("..",entry->d_name)==0))) {
+                flag = flag||checkDir((dirname)+"/"+((string)entry->d_name)) ;
+            }
+        }
+        closedir(dp);
+        return flag ;
+    }
+    else {
+        unsigned dotPos = dirname.find_last_of(".") + 1 ;
+        unsigned slashPos = dirname.find_last_of("/") + 1 ;
+        return (dotPos != dirname.npos && dotPos > slashPos && dirname.substr(dotPos) == "pgm") ;
+    }
+}
 
 void computeClasses(int argc, char *argv[], int *index, mutex *index_mutex, vector<ImageClass> *classes, mutex *classes_mutex) {
     bool flag = true ;
@@ -55,16 +83,12 @@ int main(int argc, char *argv[]) {
         cerr << "Syntax:" << argv[0] << " <number of threads> <image filename> <classes repositories>" << endl ;
         return 1 ;
     }    // Check validity of directories
-    // for(int i = 3 ; i < argc ; i++) {
-    //     DIR *dp;
-    //     dp = opendir(argv[i]);
-    //     if (dp == NULL) {
-    //         cerr << "Error with " << argv[i] << endl ;
-    //         perror("opendir: Path does not exist or could not be read.");
-    //         return 1;
-    //     }
-    //     closedir(dp);
-    // }
+    for(int i = 3 ; i < argc ; i++) {
+        if(!checkDir(argv[i])) {
+            std::cerr << "Error: no pgm image in directory " << argv[i] << std::endl ;
+            exit(EXIT_FAILURE) ;
+        }
+    }
     int index = 3 ;
     mutex index_mutex ;
     vector<ImageClass> classes ;
@@ -81,7 +105,7 @@ int main(int argc, char *argv[]) {
     string filename1 = argv[2] ;
     ImageCharacterization img1(filename1) ;
     for(unsigned i = 0 ; i < classes.size() ; i++) {
-        cout << "# " << argv[i+2] << endl ;
+        cout << "# " << argv[i+3] << endl ;
         cout << "distance min = " << classes[i].minDistance(img1) << endl ;
         cout << "distance max = " << classes[i].maxDistance(img1) << endl ;
         cout << "mean distance = " << classes[i].meanDistance(img1) << endl ;
