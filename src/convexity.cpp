@@ -74,5 +74,6 @@ double getConvexHullArea(const Domain &domain, const DigitalSet &object, const v
 double convexity(const Domain &domain, const DigitalSet &object, const vector<Point> &border) {
     double convexArea = getConvexHullArea(domain, object, border) ;
     double area = (double)object.size() ;
+    cout << area << "/" << convexArea << endl ;
     return area/convexArea ;
 }
