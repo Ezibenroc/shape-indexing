@@ -1,6 +1,7 @@
 PROJECT(Helloworld)
 #Required in DGtal
 
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMakeModules)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 ### We need Boost Program Options library
@@ -50,3 +51,14 @@ add_executable(main src/main)
 target_link_libraries(main ImageClass ImageCharacterization ${DGTAL_LIBRARIES}  ${Boost_LIBRAIRIES} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -O3")
+
+find_package(CppUnit)
+if (CPPUNIT_FOUND)
+    add_executable(testrunner tests/main.cpp tests/border_tests.cpp)
+    target_link_libraries(testrunner Border ${DGTAL_LIBRARIES})
+    target_link_libraries(testrunner cppunit)
+else (CPPUNIT_FOUND)
+    message("+---------------------------------------------+")
+    message("| CppUnit not found, tests won’t be compiled. |")
+    message("+---------------------------------------------+")
+endif (CPPUNIT_FOUND)
