@@ -57,6 +57,10 @@ ImageCharacterization::ImageCharacterization(string filename) {
     }
 }
 
+size_t ImageCharacterization::size(void) {
+    return this->signatureVector.size() ;
+}
+
 void ImageCharacterization::computeSignatureVector(const Image &image, const DigitalSet object) {
     if(this->signatureVector.size() != 0)
         return ;
@@ -83,6 +87,9 @@ void ImageCharacterization::dump(void) {
 
 double ImageCharacterization::distance(const ImageCharacterization &other) {
     double dist = 0;
+    if(!(this->signatureVector.size() == other.signatureVector.size())) {
+        cout << this->filename << " " << other.filename << endl ;
+    }
     assert(this->signatureVector.size() == other.signatureVector.size()) ;
     for(unsigned i = 0 ; i < this->signatureVector.size() ; i++) {
         dist += (this->signatureVector[i]-other.signatureVector[i])*(this->signatureVector[i]-other.signatureVector[i]) ;

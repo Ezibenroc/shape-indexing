@@ -79,6 +79,9 @@ vector<double> measures(vector<double> &sample) {
 }
 
 vector<double> ImageClass::distances(void) {
+    if(this->characterizations.size() == 1) {
+        return vector<double>(this->characterizations[0].size(), 0) ;
+    }
     vector<double> d ;
     for(unsigned i = 0 ; i < this->characterizations.size() ; i++) {
         for(unsigned j = 0 ; j < this->characterizations.size() ; j++) {
