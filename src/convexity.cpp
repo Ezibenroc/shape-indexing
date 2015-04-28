@@ -63,9 +63,10 @@ vector<Point> getConvexHull(const Domain &domain, const DigitalSet &object, cons
 double getConvexHullArea(const Domain &domain, const DigitalSet &object, const vector<Point> &border) {
     vector<Point> convexHull = getConvexHull(domain, object, border) ;
     double area = 0.0;
-    for(unsigned i = 0 ; i < convexHull.size() ; i++) {
+    unsigned int n = convexHull.size();
+    for(unsigned i = 0 ; i < n ; i++) {
         Point p = convexHull[i];
-        Point q = convexHull[i+1];
+        Point q = convexHull[(i+1)%n];
         area += (p[0]*q[1] - p[1]*q[0]) / 2.0;
     }
     return abs(area) ;
