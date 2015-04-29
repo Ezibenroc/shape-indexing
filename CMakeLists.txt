@@ -29,6 +29,9 @@ ELSE()
   MESSAGE(STATUS "WITH_QGLVIEWER missing when building DGtal. I cannot construct image2mesh")
 ENDIF()
 
+add_library(Filter src/filter)
+target_link_libraries(Filter ${DGTAL_LIBRARIES})
+
 add_library(Moment src/moment)
 target_link_libraries(Moment ${DGTAL_LIBRARIES})
 
@@ -42,7 +45,7 @@ add_library(Convexity src/convexity)
 target_link_libraries(Convexity ${DGTAL_LIBRARIES})
 
 add_library(ImageCharacterization src/imageCharacterization)
-target_link_libraries(ImageCharacterization Moment Border Convexity PerimeterVSArea ${DGTAL_LIBRARIES})
+target_link_libraries(ImageCharacterization Filter Moment Border Convexity PerimeterVSArea ${DGTAL_LIBRARIES})
 
 add_library(ImageClass src/imageClass)
 target_link_libraries(ImageClass ImageCharacterization)

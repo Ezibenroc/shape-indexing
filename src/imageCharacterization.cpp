@@ -5,6 +5,7 @@
 #include "border.h"
 #include "perimeterVSarea.h"
 #include "convexity.h"
+#include "filter.h"
 
 string infoFile(string filename) {
     int lastindex = filename.find_last_of(".");
@@ -50,9 +51,10 @@ ImageCharacterization::ImageCharacterization(string filename, bool dumpVector) {
         Image image(PGMReader<Image>::importPGM(filename)) ;
         if(!isOK(image))
             swap(image) ;
-        DigitalSet object(image.domain()) ;
-        SetFromImage<DigitalSet>::append<Image>(object, image, 0, 255) ;
-        this->computeSignatureVector(image, object) ;
+        Image filtered = filterNoise(image);
+        DigitalSet object(filtered.domain()) ;
+        SetFromImage<DigitalSet>::append<Image>(object, filtered, 0, 255) ;
+        this->computeSignatureVector(filtered, object) ;
         if(dumpVector)
             this->dump() ;
     }
