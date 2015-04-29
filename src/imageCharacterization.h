@@ -22,7 +22,7 @@ class ImageCharacterization {
         string filename ;
         vector<double> signatureVector ;
     public:
-        ImageCharacterization(string filename) ;
+        ImageCharacterization(string filename, bool dumpVector=true) ;
         size_t size(void) ;
         void computeSignatureVector(const Image &image, const DigitalSet object) ;
         vector<double> getSignatureVector(void) ;
