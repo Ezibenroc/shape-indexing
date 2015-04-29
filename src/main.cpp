@@ -115,9 +115,19 @@ int main(int argc, char *argv[]) {
         threads[i].join() ;
     }
 
+    // Computations for the normalization
+    vector<vector<double>> descriptors(classes[0].nbDescriptors()) ;
+    for(unsigned i = 0 ; i < classes.size() ; i++) {
+        classes[i].collectDescriptors(descriptors) ;
+    }
+    vector<double> normalization(descriptors.size()) ;
+    for(unsigned i = 0 ; i < normalization.size() ; i++) {
+        normalization[i] = measures(descriptors[i])[1] ; // 0=min, 1=max, 2=mean, 3=median
+    }
+
     if(nbFiles == 1) { // Info about some class
         printTitle("\n\nInformation about some class.");
-        vector<double> measures = classes[0].distances() ;
+        vector<double> measures = classes[0].distances(normalization) ;
         cout << "min distance    = " << measures[0] << endl ;
         cout << "max distance    = " << measures[1] << endl ;
         cout << "mean distance   = " << measures[2] << endl ;
@@ -125,7 +135,7 @@ int main(int argc, char *argv[]) {
     }
     else if(nbFiles ==2){ // Distance between two classes
         printTitle("\n\nDistance between two classes.");
-        vector<double> measures = classes[0].distances(classes[1]) ;
+        vector<double> measures = classes[0].distances(classes[1], normalization) ;
         cout << "min distance    = " << measures[0] << endl ;
         cout << "max distance    = " << measures[1] << endl ;
         cout << "mean distance   = " << measures[2]<< endl ;
@@ -137,7 +147,7 @@ int main(int argc, char *argv[]) {
         double minMedian = 1e20;
         int minIndex = -1 ;
         for(int unsigned i = 1 ; i < classes.size() ; i++) {
-            median = classes[0].distances(classes[i])[3] ;
+            median = classes[0].distances(classes[i], normalization)[3] ;
             if(median < minMedian) {
                 minMedian = median ;
                 minIndex = i ;

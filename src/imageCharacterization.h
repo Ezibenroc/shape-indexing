@@ -27,7 +27,8 @@ class ImageCharacterization {
         void computeSignatureVector(const Image &image, const DigitalSet object) ;
         vector<double> getSignatureVector(void) ;
         void dump(void) ;
-        double distance(const ImageCharacterization &other) ;
+        double distance(const ImageCharacterization &other, const vector<double> &normalization) ;
+        void collectDescriptors(vector<vector<double>> &descriptors) ;
 };
 
 #endif

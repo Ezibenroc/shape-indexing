@@ -78,7 +78,7 @@ vector<double> measures(vector<double> &sample) {
     return {minElt(sample), maxElt(sample), meanElt(sample), medianElt(sample)} ;
 }
 
-vector<double> ImageClass::distances(void) {
+vector<double> ImageClass::distances(const vector<double> &normalization) {
     if(this->characterizations.size() == 1) {
         return vector<double>(this->characterizations[0].size(), 0) ;
     }
@@ -86,18 +86,28 @@ vector<double> ImageClass::distances(void) {
     for(unsigned i = 0 ; i < this->characterizations.size() ; i++) {
         for(unsigned j = 0 ; j < this->characterizations.size() ; j++) {
             if(i != j)
-                d.push_back(this->characterizations[i].distance(this->characterizations[j])) ;
+                d.push_back(this->characterizations[i].distance(this->characterizations[j], normalization)) ;
         }
     }
     return measures(d) ;
 }
 
-vector<double> ImageClass::distances(const ImageClass &other) {
+vector<double> ImageClass::distances(const ImageClass &other, const vector<double> &normalization) {
     vector<double> d ;
     for(unsigned i = 0 ; i < this->characterizations.size() ; i++) {
         for(unsigned j = 0 ; j < other.characterizations.size() ; j++) {
-            d.push_back(this->characterizations[i].distance(other.characterizations[j])) ;
+            d.push_back(this->characterizations[i].distance(other.characterizations[j], normalization)) ;
         }
     }
     return measures(d) ;
+}
+
+void ImageClass::collectDescriptors(vector<vector<double>> &descriptors) {
+    for(unsigned i = 0 ; i < this->characterizations.size() ; i++) {
+        this->characterizations[i].collectDescriptors(descriptors) ;
+    }
+}
+
+unsigned ImageClass::nbDescriptors(void) {
+    return this->characterizations[0].size() ;
 }

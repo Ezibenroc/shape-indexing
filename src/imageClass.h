@@ -5,6 +5,8 @@
 
 using namespace std;
 
+vector<double> measures(vector<double> &sample) ;
+
 class ImageClass {
     private:
         vector<ImageCharacterization> characterizations ;
@@ -14,9 +16,11 @@ class ImageClass {
         size_t size(void) ;
         void dump(void) ;
         // Return [min, max, mean, median]
-        vector<double> distances(void) ;
+        vector<double> distances(const vector<double> &normalization) ;
         // Return [min, max, mean, median]
-        vector<double> distances(const ImageClass &other) ;
+        vector<double> distances(const ImageClass &other, const vector<double> &normalization) ;
+        void collectDescriptors(vector<vector<double>> &descriptors) ;
+        unsigned nbDescriptors(void) ;
 };
 
 #endif

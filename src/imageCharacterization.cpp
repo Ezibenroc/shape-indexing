@@ -89,14 +89,22 @@ void ImageCharacterization::dump(void) {
     outfile.close() ;
 }
 
-double ImageCharacterization::distance(const ImageCharacterization &other) {
+double ImageCharacterization::distance(const ImageCharacterization &other, const vector<double> &normalization) {
     double dist = 0;
-    if(!(this->signatureVector.size() == other.signatureVector.size())) {
+    if(this->signatureVector.size() != other.signatureVector.size() ||\
+        this->signatureVector.size() != normalization.size()) {
         cout << this->filename << " " << other.filename << endl ;
+        assert(false) ;
     }
-    assert(this->signatureVector.size() == other.signatureVector.size()) ;
     for(unsigned i = 0 ; i < this->signatureVector.size() ; i++) {
-        dist += (this->signatureVector[i]-other.signatureVector[i])*(this->signatureVector[i]-other.signatureVector[i]) ;
+        dist += pow((this->signatureVector[i]-other.signatureVector[i])/normalization[i], 2) ;
     }
     return sqrt(dist) ;
+}
+
+void ImageCharacterization::collectDescriptors(vector<vector<double>> &descriptors) {
+    assert(this->signatureVector.size() == descriptors.size()) ;
+    for(unsigned i = 0 ; i < this->signatureVector.size() ; i++) {
+        descriptors[i].push_back(this->signatureVector[i]) ;
+    }
 }
