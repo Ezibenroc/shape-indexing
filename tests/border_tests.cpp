@@ -25,16 +25,8 @@ using namespace DGtal::Z2i; //We'll only consider Z² digital space on
 #include <string>
 
 #include "border_tests.h"
+#include "common.h"
 #include "../src/border.h"
-
-/* Add a rectangle to the set. */
-void addRectangle(DigitalSet &object, Point lowerBound, Point upperBound) {
-    for(int i = lowerBound[0] ; i < upperBound[0] ; i++) {
-        for(int j = lowerBound[1] ; j < upperBound[1] ; j++) {
-            object.insert(Point(i, j)) ;
-        }
-    }
-}
 
 void BorderTests::testSimpleBorder() {
     Domain domain(Point(0, 0), Point(100, 100)) ;
