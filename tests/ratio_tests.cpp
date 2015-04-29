@@ -25,6 +25,7 @@ using namespace DGtal::Z2i; //We'll only consider Z² digital space on
 #include <string>
 
 #include "ratio_tests.h"
+#include "common.h"
 #include "../src/border.h"
 #include "../src/perimeterVSarea.h"
 #include "../src/convexity.h"
@@ -66,6 +67,11 @@ void RatioTests::testConvexity() {
     double d = convexity(domain, object, border) ;
     double expected = 1 ;
     double delta = 0.1 ;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(expected, d, delta) ;
+    object = DigitalSet(domain) ;
+    addRectangle(object, Point(20, 13), Point(218, 333)) ;
+    border = extractBorder(domain, object) ;
+    d = convexity(domain, object, border) ;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(expected, d, delta) ;
 }
 
