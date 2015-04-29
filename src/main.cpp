@@ -56,7 +56,7 @@ void computeClasses(int argc, char *argv[], int *index, mutex *index_mutex, vect
         if(*index < argc) {
             my_index = *index ;
             *index = *index + 1 ;
-            cout << argv[my_index] << endl ;
+            cerr << argv[my_index] << endl ;
         }
         else {
             flag = false ;
@@ -77,7 +77,7 @@ void syntaxError(char *argv[]) {
 }
 
 void printTitle(string str) {
-    cout << "\033[1;32m" << str << "\033[0m\n";
+    cerr << "\033[1;32m" << str << "\033[0m\n";
 }
 
 int main(int argc, char *argv[]) {
@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
             }
         }
         assert(minIndex != -1) ;
-        cout << argv[indexFiles] << " is likely to belong to " << argv[indexFiles+minIndex] << endl ;
+        cout << "Class of " << argv[indexFiles] << ": " << argv[indexFiles+minIndex] << endl ;
     }
     return 0;
 }
