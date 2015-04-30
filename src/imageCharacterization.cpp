@@ -58,6 +58,10 @@ ImageCharacterization::ImageCharacterization(string filename) {
     }
 }
 
+ImageCharacterization::ImageCharacterization(vector<double> &signature) {
+    this->signatureVector = vector<double>(signature) ;
+}
+
 size_t ImageCharacterization::size(void) {
     return this->signatureVector.size() ;
 }

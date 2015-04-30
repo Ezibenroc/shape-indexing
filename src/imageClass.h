@@ -13,6 +13,8 @@ class ImageClass {
         void addImages(string dirname) ;
     public:
         ImageClass(string dirname) ;
+        ImageClass(void) ;
+        void addSignature(vector<double> signature) ;
         size_t size(void) ;
         friend ostream& operator<< (ostream &out, ImageClass &img);
         // Return [min, max, mean, median]

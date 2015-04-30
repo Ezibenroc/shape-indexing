@@ -11,6 +11,12 @@ ImageClass::ImageClass(string dirname) {
     assert(this->size()) ;
 }
 
+ImageClass::ImageClass(void) {}
+
+void ImageClass::addSignature(vector<double> signature) {
+    this->characterizations.push_back(ImageCharacterization(signature)) ;
+}
+
 void ImageClass::addImages(string dirname) {
     struct stat st;
     lstat((char*)dirname.c_str(), &st);

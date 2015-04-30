@@ -50,6 +50,9 @@ target_link_libraries(ImageCharacterization Filter Moment Border Convexity Perim
 add_library(ImageClass src/imageClass)
 target_link_libraries(ImageClass ImageCharacterization)
 
+add_library(Classifier src/classifier)
+target_link_libraries(Classifier ImageClass)
+
 add_executable(learn src/learn)
 target_link_libraries(learn ImageClass ImageCharacterization ${DGTAL_LIBRARIES}  ${Boost_LIBRAIRIES} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 
