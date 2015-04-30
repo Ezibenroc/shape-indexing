@@ -53,12 +53,35 @@ void Classifier::readDescriptors(string dirDescriptors) {
     }
 }
 
+void Classifier::checkSignatures(void) {
+    for(unsigned i = 1 ; i < this->classes.size() ; i++) {
+        if(this->classes[0].signatureSize() != this->classes[i].signatureSize()) {
+            cerr << "Error: wrong number of descriptors in signature." << endl ;
+            exit(EXIT_FAILURE) ;
+        }
+    }
+}
+
 Classifier::Classifier(string dirCSV, string dirDescriptors) {
     this->readCSV(dirCSV) ;
     this->classes = vector<ImageClass>(this->classNames.size()) ;
     this->readDescriptors(dirDescriptors) ;
+    assert(this->numberClasses() && this->numberImages()) ;
+    this->checkSignatures() ;
 }
 
-size_t Classifier::size(void) {
+size_t Classifier::numberClasses(void) {
     return this->classes.size() ;
+}
+
+size_t Classifier::numberImages(void) {
+    size_t n = 0 ;
+    for(unsigned i = 0 ; i < this->classes.size() ; i++) {
+        n += this->classes[i].size() ;
+    }
+    return n ;
+}
+
+size_t Classifier::numberDescriptors(void) {
+    return this->classes[0].signatureSize() ;
 }

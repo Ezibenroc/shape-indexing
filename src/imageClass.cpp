@@ -15,6 +15,10 @@ ImageClass::ImageClass(void) {}
 
 void ImageClass::addSignature(vector<double> signature) {
     this->characterizations.push_back(ImageCharacterization(signature)) ;
+    if(this->characterizations[0].size() != this->characterizations.back().size()) {
+        cerr << "Error: wrong number of descriptors in signature." << endl ;
+        exit(EXIT_FAILURE) ;
+    }
 }
 
 void ImageClass::addImages(string dirname) {
@@ -41,6 +45,11 @@ void ImageClass::addImages(string dirname) {
 
 size_t ImageClass::size(void) {
     return this->characterizations.size() ;
+}
+
+size_t ImageClass::signatureSize(void) {
+    assert(this->characterizations.size()) ;
+    return(this->characterizations[0].size()) ;
 }
 
 // Pre-condition: v is sorted in increasing order.

@@ -16,6 +16,7 @@ class ImageClass {
         ImageClass(void) ;
         void addSignature(vector<double> signature) ;
         size_t size(void) ;
+        size_t signatureSize(void) ;
         friend ostream& operator<< (ostream &out, ImageClass &img);
         // Return [min, max, mean, median]
         vector<double> distances(const vector<double> &normalization) ;

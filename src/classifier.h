@@ -15,10 +15,13 @@ class Classifier {
         unordered_map<string, int> classNameToIndex ;
         void readCSV(string dirCSV) ;
         void readDescriptors(string dirDescriptors) ;
+        void checkSignatures(void) ;
 
     public:
         Classifier(string dirCSV, string dirDescriptors) ;
-        size_t size(void) ;
+        size_t numberClasses(void) ;
+        size_t numberImages(void) ;
+        size_t numberDescriptors(void) ;
 };
 
 #endif
