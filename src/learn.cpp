@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
     if(vm.count("help")||argc<=1|| !parseOK)
       {
         trace.info()<< "Compute the descriptors of the images contained in the given database." <<std::endl << "Basic usage: "<<std::endl
-        << "\t imgAddNoise [options] --input <imageImageFolder> --output <outputFile>"<<std::endl
+        << argv[0] << "[options] --input <imageImageFolder> --output <outputFile>"<<std::endl
         << general_opt << "\n";
         return 0;
       }
@@ -140,7 +140,7 @@ int main(int argc, char *argv[]) {
     input = vm["input"].as<std::string>();
     if ( ! ( vm.count ( "output" ) ) ) missingParam ( "--output" );
     output = vm["output"].as<std::string>();
-    if (vm.count ( "output" ))
+    if (vm.count ( "nbthread" ))
         nbThreads = vm["nbthread"].as<int>();
     }catch(const std::exception& ex){
       trace.info()<< "Error checking program options: "<< ex.what()<< std::endl; // there is an error, but it still seems to work...
