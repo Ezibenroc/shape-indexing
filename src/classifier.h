@@ -16,12 +16,14 @@ class Classifier {
         void readCSV(string dirCSV) ;
         void readDescriptors(string dirDescriptors) ;
         void checkSignatures(void) ;
+        vector<double> getNormalization(void) ;
 
     public:
         Classifier(string dirCSV, string dirDescriptors) ;
         size_t numberClasses(void) ;
         size_t numberImages(void) ;
         size_t numberDescriptors(void) ;
+        void classify(ImageClass image) ;
 };
 
 #endif

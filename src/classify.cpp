@@ -73,5 +73,9 @@ int main(int argc, char *argv[]) {
     }
 
     Classifier classifier(CSVfile, descriptorsfile) ;
+    // cerr << "Read classifier, " << classifier.numberClasses() << " classes, " << classifier.numberImages()  << " images with signatures of size " << classifier.numberDescriptors() << "." << endl ;
+    ImageClass image(imagefile) ;
+    // cerr << "Read classified, size = " << image.size() << endl ;
+    classifier.classify(image) ;
     return 0;
 }

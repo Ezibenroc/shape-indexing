@@ -85,3 +85,47 @@ size_t Classifier::numberImages(void) {
 size_t Classifier::numberDescriptors(void) {
     return this->classes[0].signatureSize() ;
 }
+
+vector<double> Classifier::getNormalization(void) {
+    vector<vector<double>> descriptors(this->numberDescriptors()) ;
+    for(unsigned i = 0 ; i < this->classes.size() ; i++) {
+        this->classes[i].collectDescriptors(descriptors) ;
+    }
+    vector<double> normalization(this->numberDescriptors()) ;
+    for(unsigned i = 0 ; i < normalization.size() ; i++) {
+        normalization[i] = measures(descriptors[i])[1] ; // 0=min, 1=max, 2=mean, 3=median
+    }
+    return normalization ;
+}
+
+
+const double epsilon = 1e-6 ;
+
+void Classifier::classify(ImageClass image) {
+    vector<double> normalization = this->getNormalization() ;
+    vector<double> score(this->classes.size(), 0) ;
+    int imin = -1 ;
+    for(unsigned i = 0 ; i < this->classes.size() ; i++) {
+        vector<double> d = this->classes[i].distances(image, normalization) ;
+        if(d[0] < epsilon) { // found null min distance
+            imin = i ;
+            break ;
+        }
+        score[i] = 1-d[3] ; // mean distance
+    }
+    if(imin != -1) { // found null min distance
+        for(unsigned i = 0 ; i < this->classes.size() ; i++) {
+            if((int)i == imin)
+                cout << "1" << "\n" ;
+            else
+                cout << "0" << "\n" ;
+        }
+    }
+    else {
+        double sum = 0 ;
+        for(unsigned i = 0 ; i < this->classes.size() ; i++)
+            sum += score[i] ;
+        for(unsigned i = 0 ; i < this->classes.size() ; i++)
+            cout << score[i]/sum << "\n" ;
+    }
+}
