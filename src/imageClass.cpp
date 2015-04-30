@@ -37,13 +37,6 @@ size_t ImageClass::size(void) {
     return this->characterizations.size() ;
 }
 
-void ImageClass::dump(void) {
-    for(unsigned i = 0 ; i < this->characterizations.size() ; i++) {
-        this->characterizations[i].dump() ;
-    }
-}
-
-
 // Pre-condition: v is sorted in increasing order.
 double minElt(const vector<double> v) {
     return v[0] ;
@@ -110,4 +103,10 @@ void ImageClass::collectDescriptors(vector<vector<double>> &descriptors) {
 
 unsigned ImageClass::nbDescriptors(void) {
     return this->characterizations[0].size() ;
+}
+
+ostream& operator<< (ostream &out, ImageClass &img) {
+    for(unsigned i = 0 ; i < img.characterizations.size() ; i++)
+        out << img.characterizations[i] ;
+    return out;
 }

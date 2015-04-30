@@ -36,7 +36,7 @@ void swap(Image &image) {
     }
 }
 
-ImageCharacterization::ImageCharacterization(string filename, bool dumpVector) {
+ImageCharacterization::ImageCharacterization(string filename) {
     this->filename = filename ;
     string infoFileName = infoFile(filename) ;
     std::ifstream infile(infoFileName);
@@ -55,8 +55,6 @@ ImageCharacterization::ImageCharacterization(string filename, bool dumpVector) {
         DigitalSet object(filtered.domain()) ;
         SetFromImage<DigitalSet>::append<Image>(object, filtered, 0, 255) ;
         this->computeSignatureVector(filtered, object) ;
-        if(dumpVector)
-            this->dump() ;
     }
 }
 
@@ -80,17 +78,6 @@ vector<double> ImageCharacterization::getSignatureVector(void) {
     return vector<double>(this->signatureVector) ;
 }
 
-void ImageCharacterization::dump(void) {
-    std::ofstream outfile(infoFile(this->filename));
-    for(unsigned i = 0 ; i < this->signatureVector.size() ; i++) {
-        if(isfinite(this->signatureVector[i]))
-            outfile << this->signatureVector[i] << "\n" ;
-        else
-            outfile << "1e30" << "\n" ;
-    }
-    outfile.close() ;
-}
-
 double ImageCharacterization::distance(const ImageCharacterization &other, const vector<double> &normalization) {
     double dist = 0;
     if(this->signatureVector.size() != other.signatureVector.size() ||\
@@ -109,4 +96,15 @@ void ImageCharacterization::collectDescriptors(vector<vector<double>> &descripto
     for(unsigned i = 0 ; i < this->signatureVector.size() ; i++) {
         descriptors[i].push_back(this->signatureVector[i]) ;
     }
+}
+
+ostream& operator<< (ostream &out, ImageCharacterization &img) {
+    out << img.filename ;
+    for(unsigned i = 0 ; i < img.signatureVector.size() ; i++) {
+        if(isfinite(img.signatureVector[i]))
+            out << " " << img.signatureVector[i];
+        else
+            out << " 1e30" ;    }
+    out << "\n" ;
+    return out ;
 }

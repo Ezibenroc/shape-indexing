@@ -22,11 +22,13 @@ class ImageCharacterization {
         string filename ;
         vector<double> signatureVector ;
     public:
-        ImageCharacterization(string filename, bool dumpVector=true) ;
+        ImageCharacterization(string filename) ;
         size_t size(void) ;
         void computeSignatureVector(const Image &image, const DigitalSet object) ;
         vector<double> getSignatureVector(void) ;
-        void dump(void) ;
+        // ostream &operator<<( ostream &output) ;
+        friend ostream& operator<< (ostream &out, ImageCharacterization &img);
+        // ofstream dump(ofstream &outfile) ;
         double distance(const ImageCharacterization &other, const vector<double> &normalization) ;
         void collectDescriptors(vector<vector<double>> &descriptors) ;
 };

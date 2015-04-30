@@ -14,7 +14,7 @@ class ImageClass {
     public:
         ImageClass(string dirname) ;
         size_t size(void) ;
-        void dump(void) ;
+        friend ostream& operator<< (ostream &out, ImageClass &img);
         // Return [min, max, mean, median]
         vector<double> distances(const vector<double> &normalization) ;
         // Return [min, max, mean, median]

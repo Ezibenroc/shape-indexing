@@ -48,7 +48,7 @@ bool checkDir(string dirname) {
     }
 }
 
-void computeClasses(int argc, char *argv[], int *index, mutex *index_mutex, vector<ImageClass> *classes, mutex *classes_mutex) {
+void computeClasses(int argc, char *argv[], int *index, mutex *index_mutex, vector<ImageClass> *classes, mutex *classes_mutex, ostream *out) {
     bool flag = true ;
     int my_index ;
     while(flag) {
@@ -67,6 +67,7 @@ void computeClasses(int argc, char *argv[], int *index, mutex *index_mutex, vect
         ImageClass img(argv[my_index]) ;
         classes_mutex->lock() ;
         classes->push_back(img);
+        *out << img ;
         classes_mutex->unlock() ;
     }
 }
@@ -107,8 +108,9 @@ int main(int argc, char *argv[]) {
     vector<ImageClass> classes ;
     mutex classes_mutex ;
     vector<thread> threads ;
+    std::ofstream outfile("test.info");
     for(int i = 0 ; i < nbThreads ; i++) {
-        threads.push_back(thread(computeClasses, argc, argv, &index, &index_mutex, &classes, &classes_mutex)) ;
+        threads.push_back(thread(computeClasses, argc, argv, &index, &index_mutex, &classes, &classes_mutex, &outfile)) ;
     }
 
     for(int i = 0 ; i < nbThreads ; i++) {
