@@ -33,14 +33,14 @@ using namespace DGtal::Z2i; //We'll only consider Z² digital space on
 void IntegrationTests::testApple() {
     ImageCharacterization image("../tests/data/apple-10.pgm") ;
     vector<double> signature = image.getSignatureVector() ;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.524, signature[0], DELTA) ;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.529, signature[0], DELTA) ;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.913, signature[1], DELTA) ;
 }
 
 void IntegrationTests::testDeer() {
     ImageCharacterization image("../tests/data/deer-12.pgm") ;
     vector<double> signature = image.getSignatureVector() ;
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.070, signature[0], DELTA) ;
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.071, signature[0], DELTA) ;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.446, signature[1], DELTA) ;
 }
 
