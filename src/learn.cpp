@@ -130,9 +130,7 @@ int main(int argc, char *argv[]) {
     po::notify(vm);
     if(vm.count("help")||argc<=1|| !parseOK)
       {
-        trace.info()<< "Compute the descriptors of the images contained in the given database." <<std::endl << "Basic usage: "<<std::endl
-        << argv[0] << "[options] --input <imageImageFolder> --output <outputFile>"<<std::endl
-        << general_opt << "\n";
+        trace.info()<< "Compute the descriptors of the images contained in the given database." <<std::endl << general_opt << "\n";
         return 0;
       }
     //Parameters

@@ -56,9 +56,7 @@ int main(int argc, char *argv[]) {
     po::notify(vm);
     if(vm.count("help")||argc<=1|| !parseOK)
       {
-        trace.info()<< "Classify the given image into one of the given classes." <<std::endl << "Basic usage: "<<std::endl
-        << argv[0] << " [options] --classes <classes CSV file> --descriptors <descriptors file> --image <image file>"<<std::endl
-        << general_opt << "\n";
+        trace.info()<< "Classify the given image into one of the given classes." <<std::endl << general_opt << "\n";
         return 0;
       }
     //Parameters
