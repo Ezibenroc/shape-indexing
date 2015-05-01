@@ -29,6 +29,10 @@ ELSE()
   MESSAGE(STATUS "WITH_QGLVIEWER missing when building DGtal. I cannot construct image2mesh")
 ENDIF()
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -O3")
+
+# Learn and classify
+
 add_library(Filter src/filter)
 target_link_libraries(Filter ${DGTAL_LIBRARIES})
 
@@ -59,8 +63,28 @@ target_link_libraries(learn ImageClass ImageCharacterization ${DGTAL_LIBRARIES} 
 add_executable(classify src/classify)
 target_link_libraries(classify Classifier ImageClass ImageCharacterization ${DGTAL_LIBRARIES}  ${Boost_LIBRAIRIES} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 
+# Evaluation
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -O3")
+SET(SRCs
+    imgRotate
+    imgScale
+    imgAddNoise)
+
+FOREACH(FILE ${SRCs})
+  add_executable(${FILE} evaluation/${FILE})
+  target_link_libraries (${FILE} ${DGTAL_LIBRARIES}  ${Boost_LIBRAIRIES}  ${Boost_PROGRAM_OPTIONS_LIBRARY})
+ENDFOREACH(FILE)
+
+add_executable(getRank evaluation/getRank)
+
+add_custom_target(evaluation ALL
+COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/evaluation/scriptClassification.sh ${CMAKE_CURRENT_BINARY_DIR}
+COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/evaluation/scriptRobustness-Hurt-me-plenty.sh ${CMAKE_CURRENT_BINARY_DIR}
+COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/evaluation/scriptRobustness-I-m-too-young-to-die.sh ${CMAKE_CURRENT_BINARY_DIR}
+COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/evaluation/scriptRobustness-Nightmare.sh ${CMAKE_CURRENT_BINARY_DIR}
+COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/classes.csv ${CMAKE_CURRENT_BINARY_DIR})
+
+# Unit tests
 
 find_package(CppUnit)
 if (CPPUNIT_FOUND)
