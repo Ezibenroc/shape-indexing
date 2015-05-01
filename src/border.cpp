@@ -45,9 +45,10 @@ vector<Point> extractBorderFromPoint(const Domain domain, const DigitalSet objec
           break ;
       }
     }
-    assert(border.size() == 2) ;
-    while(border.back() != start) {
-        border.push_back(nextPoint(object, border.end()[-2], border.end()[-1])) ;
+    if(border.size() == 2) {
+        while(border.back() != start) {
+            border.push_back(nextPoint(object, border.end()[-2], border.end()[-1])) ;
+        }
     }
     return border ;
 }
@@ -69,5 +70,6 @@ vector<Point> extractBorder(const Domain domain, const DigitalSet object) {
             }
         }
     }
+    assert(border.size() > 10) ;
     return border ;
 }
