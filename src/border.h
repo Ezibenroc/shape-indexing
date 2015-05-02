@@ -16,6 +16,7 @@ using namespace DGtal::Z2i;
 
 typedef ImageContainerBySTLVector< Domain, unsigned int > Image;
 
+// Return the largest border (in number of points) of the given object.
 vector<Point> extractBorder(const Domain domain, const DigitalSet object) ;
 
 #endif

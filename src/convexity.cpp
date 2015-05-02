@@ -25,7 +25,7 @@ public:
 };
 
 
-// Graham Scan
+// Return the convex hull of the object, given its border, using Graham Scan.
 vector<Point> getConvexHull(const Domain &domain, const DigitalSet &object, const vector<Point> &brdr) {
     vector<Point> border(brdr) ;
     if(border.size() <= 2)
@@ -60,6 +60,7 @@ vector<Point> getConvexHull(const Domain &domain, const DigitalSet &object, cons
     return convexHull;
 }
 
+// Return the area of the convex hull of the object, given its border.
 double getConvexHullArea(const Domain &domain, const DigitalSet &object, const vector<Point> &border) {
     vector<Point> convexHull = getConvexHull(domain, object, border) ;
     double area = 0.0;
@@ -72,6 +73,7 @@ double getConvexHullArea(const Domain &domain, const DigitalSet &object, const v
     return abs(area) ;
 }
 
+// Return the quotient of the area of the object by the area of its convex hull.
 double convexity(const Domain &domain, const DigitalSet &object, const vector<Point> &border) {
     double convexArea = getConvexHullArea(domain, object, border) ;
     double area = (double)object.size() ;

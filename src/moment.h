@@ -17,6 +17,8 @@ using namespace DGtal::Z2i;
 
 typedef ImageContainerBySTLVector< Domain, unsigned int > Image;
 
+// Compute moments of the image, using http://en.wikipedia.org/wiki/Image_moment
+// These moments are translation, scale and rotation invariants.
 vector<double> moment(Image image) ;
 
 #endif

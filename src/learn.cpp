@@ -53,6 +53,7 @@ bool checkDir(string dirname) {
     }
 }
 
+// Return a vector of all the names of the subdirectories.
 vector<string> getDir(string dirname) {
     struct stat st;
     vector<string> subdirs ;
@@ -79,6 +80,8 @@ vector<string> getDir(string dirname) {
     return subdirs ;
 }
 
+// Compute the signatures of the images contained in the given directories, and
+// print them in the file out. Function used to create threads.
 void computeClasses(vector<string> *directories, unsigned *index, mutex *index_mutex, vector<ImageClass> *classes, mutex *classes_mutex, ostream *out) {
     bool flag = true ;
     int my_index ;
@@ -103,10 +106,6 @@ void computeClasses(vector<string> *directories, unsigned *index, mutex *index_m
     }
 }
 
-void printTitle(string str) {
-    cerr << "\033[1;32m" << str << "\033[0m\n";
-}
-
 void missingParam(std::string param) {
   trace.error() <<" Parameter: "<<param<<" is required..";
   trace.info() <<std::endl;
@@ -114,6 +113,7 @@ void missingParam(std::string param) {
 }
 
 int main(int argc, char *argv[]) {
+    // Parse the arguments.
     string input, output ;
     int nbThreads = 1 ;
     po::options_description general_opt("Allowed options are: ");
@@ -144,6 +144,7 @@ int main(int argc, char *argv[]) {
       trace.info()<< "Error checking program options: "<< ex.what()<< std::endl; // there is an error, but it still seems to work...
     }
 
+    // Create the threads.
     vector<string> directories = getDir(input) ;
     unsigned index = 0 ;
     mutex index_mutex ;

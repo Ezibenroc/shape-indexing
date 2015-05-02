@@ -1,8 +1,5 @@
 #include "moment.h"
 
-// From https://en.wikipedia.org/wiki/Image_moment
-
-
 // Fill the vector m such that m[i][j] =  M_{ij} = \sum_x \sum_y x^i y^j I(x,y)
 // Pre-condition: m[i][j] = 0 for all i
 void rawMoment(const Image &image, Point lowerBound, Point upperBound, vector<vector<double>> &m) {
@@ -20,6 +17,8 @@ void rawMoment(const Image &image, Point lowerBound, Point upperBound, vector<ve
 }
 #include <iostream>
 
+// Compute moments of the image, using http://en.wikipedia.org/wiki/Image_moment
+// These moments are translation, scale and rotation invariants.
 vector<double> moment(Image image)  {
 
     // Raw moment

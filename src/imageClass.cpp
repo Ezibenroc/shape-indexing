@@ -6,13 +6,16 @@
 #include <algorithm>
 #include "imageClass.h"
 
+// Initialization with all the PGM files contained in the given directory.
 ImageClass::ImageClass(string dirname) {
     this->addImages(dirname) ;
     assert(this->size()) ;
 }
 
+// Initialization with no images.
 ImageClass::ImageClass(void) {}
 
+// Add the signature to the class.
 void ImageClass::addSignature(vector<double> signature) {
     this->characterizations.push_back(ImageCharacterization(signature)) ;
     if(this->characterizations[0].size() != this->characterizations.back().size()) {
@@ -21,6 +24,7 @@ void ImageClass::addSignature(vector<double> signature) {
     }
 }
 
+// Add the image(s) contained in the given directory.
 void ImageClass::addImages(string dirname) {
     struct stat st;
     lstat((char*)dirname.c_str(), &st);
@@ -43,10 +47,12 @@ void ImageClass::addImages(string dirname) {
     }
 }
 
+// Return the number of images.
 size_t ImageClass::size(void) {
     return this->characterizations.size() ;
 }
 
+// Return the number of descriptors.
 size_t ImageClass::signatureSize(void) {
     assert(this->characterizations.size()) ;
     return(this->characterizations[0].size()) ;
@@ -86,6 +92,8 @@ vector<double> measures(vector<double> &sample) {
     return {minElt(sample), maxElt(sample), meanElt(sample), medianElt(sample)} ;
 }
 
+// Return statistics about the distances between the images of the class.
+// Return [min, max, mean, median].
 vector<double> ImageClass::distances(const vector<double> &normalization) {
     if(this->characterizations.size() == 1) {
         return vector<double>(this->characterizations[0].size(), 0) ;
@@ -100,6 +108,8 @@ vector<double> ImageClass::distances(const vector<double> &normalization) {
     return measures(d) ;
 }
 
+// Return statistics about the distances between the images of the two classes.
+// Return [min, max, mean, median].
 vector<double> ImageClass::distances(const ImageClass &other, const vector<double> &normalization) {
     vector<double> d ;
     for(unsigned i = 0 ; i < this->characterizations.size() ; i++) {
@@ -110,16 +120,14 @@ vector<double> ImageClass::distances(const ImageClass &other, const vector<doubl
     return measures(d) ;
 }
 
+// Append all the descriptors in the given vector.
 void ImageClass::collectDescriptors(vector<vector<double>> &descriptors) {
     for(unsigned i = 0 ; i < this->characterizations.size() ; i++) {
         this->characterizations[i].collectDescriptors(descriptors) ;
     }
 }
 
-unsigned ImageClass::nbDescriptors(void) {
-    return this->characterizations[0].size() ;
-}
-
+// Print function (used to print in the database file).
 ostream& operator<< (ostream &out, ImageClass &img) {
     for(unsigned i = 0 ; i < img.characterizations.size() ; i++)
         out << img.characterizations[i] ;

@@ -30,10 +30,6 @@ using namespace DGtal;
 using namespace DGtal::Z2i; //We'll only consider Z² digital space on
                 //32bit integers
 
-void printTitle(string str) {
-    cerr << "\033[1;32m" << str << "\033[0m\n";
-}
-
 void missingParam(std::string param) {
   trace.error() <<" Parameter: "<<param<<" is required..";
   trace.info() <<std::endl;
@@ -41,6 +37,7 @@ void missingParam(std::string param) {
 }
 
 int main(int argc, char *argv[]) {
+    // Parse the arguments.
     string CSVfile, descriptorsfile, imagefile ;
     po::options_description general_opt("Allowed options are: ");
     general_opt.add_options()
@@ -70,10 +67,9 @@ int main(int argc, char *argv[]) {
       trace.info()<< "Error checking program options: "<< ex.what()<< std::endl; // there is an error, but it still seems to work...
     }
 
+    // Classification.
     Classifier classifier(CSVfile, descriptorsfile) ;
-    // cerr << "Read classifier, " << classifier.numberClasses() << " classes, " << classifier.numberImages()  << " images with signatures of size " << classifier.numberDescriptors() << "." << endl ;
     ImageClass image(imagefile) ;
-    // cerr << "Read classified, size = " << image.size() << endl ;
     classifier.classify(image) ;
     return 0;
 }

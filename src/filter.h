@@ -16,6 +16,7 @@ using namespace DGtal::Z2i;
 
 typedef ImageContainerBySTLVector< Domain, unsigned int > Image;
 
+// Remove some noise of the image. Used as preprocessing.
 Image filterNoise(const Image& img) ;
 
 #endif

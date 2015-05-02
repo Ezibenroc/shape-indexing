@@ -3,6 +3,7 @@
 
 vector<Point> pos = {Point(-1, -1), Point(-1, 0), Point(-1, 1), Point(0, 1), Point(1, 1), Point(1, 0), Point(1, -1), Point(0, -1)};
 
+// Return all the neighbours of the given point.
 vector<Point> getNeighbours(const Domain d, Point p) {
     vector<Point> neigh ;
     for(unsigned i = 0 ; i < pos.size()  ; i++) {
@@ -22,6 +23,7 @@ unsigned mod(int p, int n) {
     return p ;
 }
 
+// Return the next point of the border, given the two previous points.
 Point nextPoint(const DigitalSet object, Point before, Point now) {
     Point diff = now-before ;
     unsigned i = 0 ;
@@ -34,7 +36,8 @@ Point nextPoint(const DigitalSet object, Point before, Point now) {
     return now + pos[mod(i, pos.size())] ;
 }
 
-// Return the border containing the point start
+
+// Return the border of the given object containing the given point.
 vector<Point> extractBorderFromPoint(const Domain domain, const DigitalSet object, Point start) {
     vector<Point> border ;
     border.push_back(start) ;
@@ -53,7 +56,8 @@ vector<Point> extractBorderFromPoint(const Domain domain, const DigitalSet objec
     return border ;
 }
 
-// Return the border of the biggest connected component (in number of points).
+
+// Return the largest border (in number of points) of the given object.
 vector<Point> extractBorder(const Domain domain, const DigitalSet object) {
     vector<Point> border;
     vector<Point> tmp ;

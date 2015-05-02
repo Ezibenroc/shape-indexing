@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "classifier.h"
 
+// Take /path/to/file-3.pgm and returns file.
 string fileToClass(std::string filename) {
     int begin = filename.find_last_of("/");
     string tmp = filename.substr(begin+1, filename.size()-begin) ;
@@ -13,6 +14,7 @@ string fileToClass(std::string filename) {
     return tmp.substr(0, end) ;
 }
 
+// Fill the maps with the CSV file.
 void Classifier::readCSV(string dirCSV) {
     int index = 0 ;
     ifstream  data(dirCSV);
@@ -30,6 +32,7 @@ void Classifier::readCSV(string dirCSV) {
     }
 }
 
+// Read the descriptors.
 void Classifier::readDescriptors(string dirDescriptors) {
     ifstream  data(dirDescriptors);
     string line;
@@ -53,6 +56,7 @@ void Classifier::readDescriptors(string dirDescriptors) {
     }
 }
 
+// Verify the integrity of the descriptors.
 void Classifier::checkSignatures(void) {
     for(unsigned i = 1 ; i < this->classes.size() ; i++) {
         if(this->classes[0].signatureSize() != this->classes[i].signatureSize()) {
@@ -62,6 +66,7 @@ void Classifier::checkSignatures(void) {
     }
 }
 
+// Initialize the classifier with the CSV and the descriptors files.
 Classifier::Classifier(string dirCSV, string dirDescriptors) {
     this->readCSV(dirCSV) ;
     this->classes = vector<ImageClass>(this->classNames.size()) ;
@@ -86,6 +91,7 @@ size_t Classifier::numberDescriptors(void) {
     return this->classes[0].signatureSize() ;
 }
 
+// Compute the normalization vector.
 vector<double> Classifier::getNormalization(void) {
     vector<vector<double>> descriptors(this->numberDescriptors()) ;
     for(unsigned i = 0 ; i < this->classes.size() ; i++) {
@@ -98,9 +104,12 @@ vector<double> Classifier::getNormalization(void) {
     return normalization ;
 }
 
-
+// x < epsilon is interpreted as x=0
 const double epsilon = 1e-6 ;
 
+// Print the classification of the given image.
+// For each class (in the order of the CSV file), print the probability
+// that the image belongs to it.
 void Classifier::classify(ImageClass image) {
     vector<double> normalization = this->getNormalization() ;
     vector<double> score(this->classes.size(), 0) ;

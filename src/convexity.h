@@ -16,9 +16,7 @@ using namespace DGtal::Z2i;
 
 typedef ImageContainerBySTLVector< Domain, unsigned int > Image;
 
-/*
-    Return area(object)/area(circle(perimeter((object))))
-*/
+// Return the quotient of the area of the object by the area of its convex hull.
 double convexity(const Domain &domain, const DigitalSet &object, const vector<Point> &border) ;
 
 #endif

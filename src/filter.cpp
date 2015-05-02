@@ -1,5 +1,6 @@
 #include "filter.h"
 
+// Remove some noise of the image. Used as preprocessing.
 Image filterNoise(const Image& img) {
     Domain dom = img.domain();
     Image out(dom);
