@@ -63,6 +63,9 @@ target_link_libraries(learn ImageClass ImageCharacterization ${DGTAL_LIBRARIES} 
 add_executable(classify src/classify)
 target_link_libraries(classify Classifier ImageClass ImageCharacterization ${DGTAL_LIBRARIES}  ${Boost_LIBRAIRIES} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 
+add_executable(distance src/distance)
+target_link_libraries(distance ImageCharacterization ${DGTAL_LIBRARIES}  ${Boost_LIBRAIRIES} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+
 # Evaluation
 
 SET(SRCs
