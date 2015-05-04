@@ -34,7 +34,7 @@ for ((CLASSID=1; CLASSID <= 70; CLASSID++)); do
             ./imgAddNoise -i tmp2_$$.pgm -o tmp_$$.pgm -n $NOISE  2> /dev/null
 
             ##Running the retrieval
-            eval `echo $CLASSIFPROG tmp_$$.pgm` >! scores_tmp_$$.txt
+            eval `echo $CLASSIFPROG tmp_$$.pgm` >! scores_tmp_$$.txt || cp tmp_$$.pgm error_`date +%Y-%m-%d_%H-%M-%S_`$$.pgm
             RANK=` ./getRank scores_tmp_$$.txt $CLASSID`
             echo "Rank=$RANK"
 
