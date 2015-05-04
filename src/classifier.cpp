@@ -120,7 +120,7 @@ void Classifier::classify(ImageClass image) {
             imin = i ;
             break ;
         }
-        score[i] = 1-d[3] ; // mean distance
+        score[i] = 1-d[0] ; // min distance
     }
     if(imin != -1) { // found null min distance
         for(unsigned i = 0 ; i < this->classes.size() ; i++) {
