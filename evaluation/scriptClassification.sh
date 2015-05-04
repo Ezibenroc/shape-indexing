@@ -33,13 +33,13 @@ for ((i=0; i < $NBIMGTESTS; i++)); do
             ANGLE=$((rand48()*3.1415))
             SCALE=$((rand48()*3))
             NOISE=$((rand48()*0.5))
-            ./imgRotate -i $IMGNAME -o tmp.pgm -a $ANGLE 2> /dev/null
-            ./imgScale -i tmp.pgm -o tmp2.pgm -s $SCALE 2> /dev/null
-            ./imgAddNoise -i tmp2.pgm -o tmp.pgm -n $NOISE  2> /dev/null
+            ./imgRotate -i $IMGNAME -o tmp_$$.pgm -a $ANGLE 2> /dev/null
+            ./imgScale -i tmp_$$.pgm -o tmp2_$$.pgm -s $SCALE 2> /dev/null
+            ./imgAddNoise -i tmp2_$$.pgm -o tmp_$$.pgm -n $NOISE  2> /dev/null
 
             ##Running the retrieval
-            eval `echo $CLASSIFPROG tmp.pgm` >! scores_tmp.txt
-            RANK=` ./getRank scores_tmp.txt $CLASSID`
+            eval `echo $CLASSIFPROG tmp_$$.pgm` >! scores_tmp_$$.txt
+            RANK=` ./getRank scores_tmp_$$.txt $CLASSID`
             echo "Rank=$RANK"
 
             ##Number of correct results in the first 10
@@ -54,6 +54,6 @@ echo
 echo "Number of 'correct' classification (first 10 classes)= "$correct
 echo "Total number of tests= "$cpt
 echo "Final score= " $(( $correct / $cpt ))
-rm tmp.pgm
-rm tmp2.pgm
-rm scores_tmp.txt
+rm tmp_$$.pgm
+rm tmp2_$$.pgm
+rm scores_tmp_$$.txt
