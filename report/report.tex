@@ -1,0 +1,276 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[gen]{eurosym}
+
+\DeclareUnicodeCharacter{20AC}{\euro{}}
+
+%\usepackage{palatino, eulervm} %fonts
+\usepackage[left=1.5cm, right=2cm, top=3cm, bottom=2cm]{geometry}
+\setlength{\headsep}{5mm}
+\setlength{\headheight}{14pt}
+\parindent=0mm
+\parskip=3mm
+\usepackage[ruled, vlined, linesnumbered]{algorithm2e}
+
+\usepackage{graphicx}
+\usepackage{tikz} % Let us start the fun
+\usetikzlibrary{positioning, chains, calc, arrows, decorations.pathreplacing, fit, calc, patterns}
+
+\newcommand{\bigO}[1]{\mathcal O\left( #1 \right)}
+\newcommand{\bigOmega}[1]{\Omega\left( #1 \right)}
+\newcommand{\bigTheta}[1]{\Theta\left( #1 \right)}
+\newcommand{\smallTheta}[1]{\theta\left( #1 \right)}
+\newcommand{\chicken}[2][]{\log_{#1}\left( #2 \right)} % because Hungarian chicken says "log"
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\eps}{\varepsilon}
+
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\zo}{\set{0, 1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+
+\newcommand{\prob}[1]{\mathbb{P}\left[ #1 \right]}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\U}{\mathcal{U}}
+
+\renewcommand{\bar}{\overline}
+
+\newcommand{\Adv}{\mathrm{Adv}}
+
+\usepackage[pdfusetitle]{hyperref}
+\usepackage{amsmath,amsthm,amssymb,array,enumerate,cancel,nth,stmaryrd,fancyhdr,mathtools}
+\usepackage{enumitem}
+\setlist{nolistsep}
+\newtheorem{lemma}{Lemma}
+\newtheorem{thm}{Theorem}
+\newtheorem{claim}{Claim}
+\theoremstyle{example}
+\newtheorem{ex}{Example}
+\theoremstyle{remark}
+\newtheorem{rk}{Remark}
+\newtheorem{anecdote}{Anecdote}
+\theoremstyle{definition}
+\newtheorem{hw}{Homework}
+\newtheorem{definition}{Definition}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+\title{Image processing\\Shape Indexing Project}
+
+\author{Tom \textsc{Cornebize}\\Romain \textsc{Labolle}}
+
+\date{May 4, 2015}
+
+
+\begin{document}
+
+\maketitle
+
+\pagestyle{fancy}
+\fancyhead[L]{Tom \textsc{Cornebize}}
+\fancyhead[C]{Shape Indexing Project}
+\fancyhead[R]{Romain \textsc{Labolle}}
+
+\section{Introduction}
+
+The objective of this project is to design a binary shape indexing/retrieval system. Given a binary shape and a database of binary shapes categorized in different classes, the goal is to find the class that best match the shape.
+
+\section{Overview of the algorithm}
+
+The basic idea of the indexing algorithm is to extract different values from a given binary shape in order to build what we call a signature vector. Two similar shapes must have similar signature vectors. Thus, the values used to build the signature vector must be invariant by translation, rotation and scaling. Moreover, the given image may contain some extra noise that we must remove before computing the signature vector. We also want two non-similar images to have non-similar signature vectors, to be able to recognize the class of an image.
+
+\section{Signature vector}
+
+We have implemented three algorithms that extract a total of ten values from the image order to generate a 10-dimensional signature vector that represents the image. All theses values are invariant from rotation, translation and scaling.
+
+\subsection{Roughness}
+
+The first value of the signature vector is the quotient of the area of the shape by the area of the circle of same perimeter. This value describes the roughness of the shape since to reduce the area of a shape of given perimeter, we have to add breaks in the outline of the shape.
+
+This value is invariant by rotation, translation and scaling.
+
+\subsection{Convexity}
+
+The second value of the signature vector is the quotient of the area of the shape by the area of the convex hull of the shape. This describes how much convex the object is.
+
+This value is invariant by rotation, translation and scaling.
+
+One can think that these values are redundant. Indeed, $\mathrm{roughness}(circle) = \mathrm{convexity}(circle) = 1$.
+
+But consider a rectangle of size $x\ell \times \ell$ where $x \in \R^+$.
+
+The area of the rectangle is $x\ell^2$, its perimeter is $2\ell(x+1)$.
+
+The area of a circle of perimeter $p$ is $\frac{p^2}{4\pi}$.
+
+Thus, the area of the circle of same perimeter than the rectangle is $\frac{\ell^2(x+1)^2}{\pi}$.
+
+In all, the roughness of the rectangle is:
+\[\frac{x\ell^2}{\frac{\ell^2(x+1)^2}{\pi}} = \frac{\pi x}{(x+1)^2}\]
+
+This value tends to $0$ when $x$ tends to $+\infty$, whereas the value of the convexity is always $1$ for the rectangle (the convex hull is the rectangle itself).
+
+Therefore, it makes sense to consider both of these values.
+
+\subsection{Invariant moments}
+
+The remaining 8 values are invariant moments taken from Wikipedia's ``Image moment'' page \footnote{\url{https://en.wikipedia.org/wiki/Image_moment}}.
+
+We define the following notions:
+
+\begin{definition}[Intensity]
+$ \forall x,y, ~ I(x,y) = \begin{cases}
+1 \text{ if (x,y) is part of the shape (white pixels)}\\
+0 \text{ otherwise}
+\end{cases}$
+\end{definition}
+\begin{definition}[Raw moments]
+$\forall i,j \geq 0, ~ M_{ij} = \sum\limits_x \sum\limits_y x^i y^j I(x,y)$
+\end{definition}
+\begin{definition}[Central moments]
+$\forall p,q \geq 0, ~ \mu_{pq} = \sum\limits_{x} \sum\limits_{y} (x - \bar{x})^p(y - \bar{y})^q I(x,y)$ where $\bar{x} = \frac{M_{10}}{M_{00}}$ and $\bar{y} = \frac{M_{01}}{M_{00}}$
+
+These moments are invariant from translation.
+\end{definition}
+\begin{definition}[Scale invariant moments]
+$\forall i,j \geq 0, ~ \eta_{ij} = \frac{\mu_{ij}}{\mu_{00}^{\left(1 + \frac{i+j}{2}\right)}}$
+
+These moments are invariant from translation and scaling.
+\end{definition}
+\begin{definition}[Rotation invariant moments]
+\begin{align*}
+I_1 =& \eta_{20} + \eta_{02} \\
+I_2 =& (\eta_{20} - \eta_{02})^2 + 4\eta_{11}^2 \\
+I_3 =& (\eta_{30} - 3\eta_{12})^2 + (3\eta_{21} - \eta_{03})^2 \\
+I_4 =& (\eta_{30} + \eta_{12})^2 + (\eta_{21} + \eta_{03})^2 \\
+I_5 =& (\eta_{30} - 3\eta_{12}) (\eta_{30} + \eta_{12})[ (\eta_{30} + \eta_{12})^2 - 3 (\eta_{21} + \eta_{03})^2] \\
+&+ (3 \eta_{21} - \eta_{03}) (\eta_{21} + \eta_{03})[ 3(\eta_{30} + \eta_{12})^2 -  (\eta_{21} + \eta_{03})^2] \\
+I_6 =&  (\eta_{20} - \eta_{02})[(\eta_{30} + \eta_{12})^2 - (\eta_{21} + \eta_{03})^2] + 4\eta_{11}(\eta_{30} + \eta_{12})(\eta_{21} + \eta_{03}) \\
+I_7 =& (3 \eta_{21} - \eta_{03})(\eta_{30} + \eta_{12})[(\eta_{30} + \eta_{12})^2 - 3(\eta_{21} + \eta_{03})^2] \\
+&- (\eta_{30} - 3\eta_{12})(\eta_{21} + \eta_{03})[3(\eta_{30} + \eta_{12})^2 - (\eta_{21} + \eta_{03})^2] \\
+I_8 =& \eta_{11}[ ( \eta_{30} + \eta_{12})^2 - (\eta_{03} + \eta_{21})^2  ] - (\eta_{20}-\eta_{02}) (\eta_{30}+\eta_{12}) (\eta_{03}+\eta_{21})
+\end{align*}
+
+These moments are invariant from rotation, translation and scaling. We use these 8 moments for the signature vector
+\end{definition}
+
+
+\section{Image processing}
+
+\subsection{Border extraction}
+
+In order to calculate the perimeter of a given shape, we need to extract its border. To do so, we use the border extraction algorithm seen during the 6\textsuperscript{th} practical session.
+
+%TODO: describe the actual algorithm ?
+
+Since the shape may contain several connected components, we take the one with the largest border (in number of points).
+
+\subsection{Convex hull extraction}
+
+The convex hull of the shape is calculated from the extracted border using the Graham’s Scan algorithm seen in course.
+
+%TODO: describe ?
+
+Since it use the previously extracted border, it also only consider the bigest connected component.
+
+
+\subsection{Noise deletion}
+
+The input file may contain some noise that may prevent our algorithm to run efficiently (it adds more connected components). In particular, the evaluation tool chain adds some Kanungo noise to the shape which is a local pixel swapping algorithm. To remove this noise, we use a binomial filter seen in course :
+
+\[ \mathcal{F} = \frac{1}{16}\bordermatrix{ &&& \cr
+& 1 & 2 & 1 \cr
+& 2 & 4 & 2 \cr
+& 1 & 2 & 1}\]
+
+To obtain a binary image, we just round to the closest value between black and white.
+
+This filter is used for smoothing grayscale images and when applied to binary images, it's an efficient way to remove isolated pixels, smooth the borders and it doesn't affect too much the original images.
+
+See figure \ref{fig:noise} for example result.
+
+\begin{figure}[!ht]
+
+\centering
+\includegraphics[width=.3\textwidth]{images/fly-5_orig.eps}\hfill
+\includegraphics[width=.3\textwidth]{images/fly-5_noise.eps}\hfill
+\includegraphics[width=.3\textwidth]{images/fly-5_filter.eps}
+
+\caption{Noise deletion algorithm: original image, noisy image and filtered image}
+\label{fig:noise}
+
+\end{figure}
+
+\section{Classification}
+
+An image is characterized by a vector $v \in \R^d$.
+
+A class is a set of image vectors.
+
+We discuss here how to retrieve the class of an image. We suppose that we have computed the signature vector of the given image and that we know the signature vectors of all the images of all the classes.
+
+\subsection{Distance computation}
+
+The distance between two vectors $v_1 = \begin{pmatrix}v_{11}\\\vdots\\ v_{1d}\end{pmatrix}$ and $v_2 = \begin{pmatrix}v_{21}\\\vdots\\ v_{2d}\end{pmatrix}$ is defined as follow:
+
+\[\mathrm{dist}(v_1, v_2) = \sqrt{\sum_{i=1}^d \left(\mathrm{normalize}(v_{1i}, i)-\mathrm{normalize}(v_{2i}, i)\right)^2}\]
+
+Where 
+\[\mathrm{normalize}(x, i) = \frac{x}{\max_{\text{all vectors u}}u_i}\]
+
+The aim of the normalization is to give the same weight to all the descriptors. Indeed, some descriptors are usually smaller than others. For instance, the maximal convexity descriptor that we found was about $2.17$ whereas the maximal $I_7$ descriptor was about $0.0036$.
+
+\subsection{Choice of the class}
+
+For each class, we compute the distances between each image of the class and the given image. We obtain a sequence of real numbers per class.
+
+We can now compute some metrics about these sequences: minimum distance, maximum distance, mean distance, median distance.
+
+The maximum and the mean distances do not seem to be good choices, since they are easily broken by some artifacts.
+
+The median and the minimum distances seem to be better. We will discuss more about this choice on section \ref{exp}.
+
+Then, the lower is this metric, the higher is the probability that our image belong to the considered class.
+
+
+\section{Experimental results}
+\label{exp}
+
+Thanks to the script \emph{scriptClassification.sh}, we tested the efficiency of our classifier.
+
+We picked randomly $5$ images of each class and then computed the rank given by our classifier for each image (meaning: if the rank is near $1$, then the classification was successful). An image is considered correctly classified if the rank is lower or equal to $10$.
+
+\paragraph{Choice of the class: median distance}
+
+Here, we consider the median distance between the considered image and all the images of the considered class.
+
+We had a success rate of 72\%.
+
+\paragraph{Choice of the class: minimum distance}
+
+Here, we consider the minimum distance between the considered image and all the images of the considered class.
+
+We had a success rate of 97\%.
+
+\paragraph{Conclusion on the choice}
+
+It is clear from the previous results that the minimum distance is a better indication to retrieve the class of an image. An explanation can be that to generate new images to classify, we took an image already classified and modified it (rotation, scaling and noise). The distance between the new image and the old image should be small, since we remove the noise and compute descriptors invariant by scaling and rotation.
+
+
+\section{Conclusion}
+
+
+
+
+\end{document}
