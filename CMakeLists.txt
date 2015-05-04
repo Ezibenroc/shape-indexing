@@ -85,9 +85,6 @@ add_executable(getRank evaluation/getRank)
 
 add_custom_target(evaluation ALL
 COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/evaluation/scriptClassification.sh ${CMAKE_CURRENT_BINARY_DIR}
-COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/evaluation/scriptRobustness-Hurt-me-plenty.sh ${CMAKE_CURRENT_BINARY_DIR}
-COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/evaluation/scriptRobustness-I-m-too-young-to-die.sh ${CMAKE_CURRENT_BINARY_DIR}
-COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/evaluation/scriptRobustness-Nightmare.sh ${CMAKE_CURRENT_BINARY_DIR}
 COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/classes.csv ${CMAKE_CURRENT_BINARY_DIR})
 
 # Unit tests
