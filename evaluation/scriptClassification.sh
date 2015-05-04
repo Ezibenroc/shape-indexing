@@ -4,11 +4,8 @@ zmodload -i zsh/mathfunc
 ##YOUR Classification progname
 CLASSIFPROG="./classify -c classes.csv -d descriptors.info -i"
 
-#nb of source images to test
-NBIMGTESTS=40
-
 #nb of noisyfied copies
-NBTESTS=5
+NBTESTS=1
 
 #No noise here
 MAXNOISE=0.0
@@ -16,9 +13,8 @@ sum=0.0
 variance=0.0
 cpt=0.0
 
-for ((i=0; i < $NBIMGTESTS; i++)); do
+for ((CLASSID=1; CLASSID <= 70; CLASSID++)); do
     ##Pick a random class
-    CLASSID=`expr $RANDOM % 61 + 1`
     CLASSNAME=`head -$CLASSID classes.csv | tail -1 | sed -e 's/,//'`
     echo "Classname: "$CLASSNAME
 
