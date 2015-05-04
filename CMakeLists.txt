@@ -33,6 +33,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -O3")
 
 # Learn and classify
 
+add_executable(imgDelNoise src/imgDelNoise)
+target_link_libraries(imgDelNoise ${DGTAL_LIBRARIES})
+
 add_library(Filter src/filter)
 target_link_libraries(Filter ${DGTAL_LIBRARIES})
 
