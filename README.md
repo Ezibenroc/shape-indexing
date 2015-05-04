@@ -37,6 +37,9 @@ Basic usage:
 Print the probability of the given image to belong to each of the classes, in the
 order provided by the CSV file.
 
+It requires a file containing the signature vectors of all the images, as computed
+by the program `learn`. Consider using the file `descriptors.info`.
+
 Basic usage:
 ```
 ./classify --classes <classes CSV file> --descriptors <descriptors file> --image <image file>
