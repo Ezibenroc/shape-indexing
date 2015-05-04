@@ -74,6 +74,5 @@ vector<Point> extractBorder(const Domain domain, const DigitalSet object) {
             }
         }
     }
-    assert(border.size() > 10) ;
     return border ;
 }
