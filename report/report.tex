@@ -84,7 +84,7 @@
 
 \section{Introduction}
 
-The objective of this project is to design a binary shape indexing/retrieval system. Given a binary shape and a database of binary shapes categorized in different classes, the goal is to find the class that best match the shape.
+The objective of this project is to design a binary shape indexing/retrieval system. Given a binary shape and a database of binary shapes categorized in different classes, the goal is to find the class that best match the shape. To do so, we implemented several classical image processing algorithms in C++, using the DGtal library\footnote{\url{http://dgtal.org/}}. Our work is detailed in the present report.
 
 \section{Overview of the algorithm}
 
@@ -92,7 +92,7 @@ The basic idea of the indexing algorithm is to extract different values from a g
 
 \section{Signature vector}
 
-We have implemented three algorithms that extract a total of ten values from the image order to generate a 10-dimensional signature vector that represents the image. All theses values are invariant from rotation, translation and scaling.
+We have implemented three algorithms that extract a total of ten values from the image to generate a 10-dimensional signature vector that represents the image. All theses values are invariant from rotation, translation and scaling.
 
 \subsection{Roughness}
 
@@ -182,12 +182,12 @@ The convex hull of the shape is calculated from the extracted border using the G
 
 %TODO: describe ?
 
-Since it use the previously extracted border, it also only consider the bigest connected component.
+Since it uses the previously extracted border, it also only considers the biggest connected component.
 
 
 \subsection{Noise deletion}
 
-The input file may contain some noise that may prevent our algorithm to run efficiently (it adds more connected components). In particular, the evaluation tool chain adds some Kanungo noise to the shape which is a local pixel swapping algorithm. To remove this noise, we use a binomial filter seen in course :
+The input file may contain some noise that may prevent our algorithm to run efficiently. In particular, the evaluation tool chain adds some Kanungo noise to the shape which is a local pixel swapping algorithm. To remove this noise, we use a binomial filter seen in course :
 
 \[ \mathcal{F} = \frac{1}{16}\bordermatrix{ &&& \cr
 & 1 & 2 & 1 \cr
@@ -196,7 +196,7 @@ The input file may contain some noise that may prevent our algorithm to run effi
 
 To obtain a binary image, we just round to the closest value between black and white.
 
-This filter is used for smoothing grayscale images and when applied to binary images, it's an efficient way to remove isolated pixels, smooth the borders and it doesn't affect too much the original images.
+This filter is used to smooth gray-scale images and when applied to binary images, it is an efficient way to remove isolated pixels, smooth the borders without affecting too much the original image.
 
 See figure \ref{fig:noise} for example result.
 
@@ -222,7 +222,7 @@ We discuss here how to retrieve the class of an image. We suppose that we have c
 
 \subsection{Distance computation}
 
-The distance between two vectors $v_1 = \begin{pmatrix}v_{11}\\\vdots\\ v_{1d}\end{pmatrix}$ and $v_2 = \begin{pmatrix}v_{21}\\\vdots\\ v_{2d}\end{pmatrix}$ is defined as follow:
+The distance between two vectors $v_1 = \begin{pmatrix}v_{11}\\\vdots\\ v_{1d}\end{pmatrix}$ and $v_2 = \begin{pmatrix}v_{21}\\\vdots\\ v_{2d}\end{pmatrix}$ is defined as follows:
 
 \[\mathrm{dist}(v_1, v_2) = \sqrt{\sum_{i=1}^d \left(\mathrm{normalize}(v_{1i}, i)-\mathrm{normalize}(v_{2i}, i)\right)^2}\]
 
@@ -239,9 +239,9 @@ We can now compute some metrics about these sequences: minimum distance, maximum
 
 The maximum and the mean distances do not seem to be good choices, since they are easily broken by some artifacts.
 
-The median and the minimum distances seem to be better. We will discuss more about this choice on section \ref{exp}.
+The median and the minimum distances seem to be better. We will discuss more about this choice in section \ref{exp}.
 
-Then, the lower is this metric, the higher is the probability that our image belong to the considered class.
+Then, the lower is this metric, the higher is the probability that our image belongs to the considered class.
 
 
 \section{Experimental results}
@@ -253,13 +253,13 @@ We picked randomly $5$ images of each class and then computed the rank given by 
 
 \paragraph{Choice of the class: median distance}
 
-Here, we consider the median distance between the considered image and all the images of the considered class.
+Here, we take the median distance between the considered image and all the images of the considered class.
 
 We had a success rate of 72\%.
 
 \paragraph{Choice of the class: minimum distance}
 
-Here, we consider the minimum distance between the considered image and all the images of the considered class.
+Here, we take the minimum distance between the considered image and all the images of the considered class.
 
 We had a success rate of 97\%.
 
@@ -270,7 +270,11 @@ It is clear from the previous results that the minimum distance is a better indi
 
 \section{Conclusion}
 
+We created a program that classify shapes with a high success rate. It is based on ten simple values computed for each image.
 
+We could improve our classification by adding other values to the signature vectors. For instance, the angles of the lines of the segmented image are often meaningful.
+
+Decreasing the execution time of our programs would also be a great achievement: it took more than an hour to compute all the signature vectors of the database, which consists of only 1050 images.
 
 
 \end{document}
